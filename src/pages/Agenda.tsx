@@ -30,7 +30,8 @@ import {
   MessageCircle,
 } from 'lucide-react'
 import { useStore } from '../lib/store'
-import { dateLabel, normalize, messageOf, whatsapp } from '../lib/utils'
+import { dateLabel, normalize, messageOf } from '../lib/utils'
+import { layoutMeetings, meetingWhatsapp } from '../lib/agenda'
 import type { Meeting } from '../lib/types'
 import { Avatar, Badge, Empty, PageTitle, Modal, Dictation, External } from '../components/UI'
 import type { OpenForm } from './Feed'
@@ -55,7 +56,11 @@ export function MeetingList({ meetings, open }: { meetings: Meeting[]; open: Ope
         const Icon =
           m.location_type === 'virtual' ? Video : m.location_type === 'presencial' ? MapPin : Phone
         return (
-          <button className="card meeting-card" key={m.id} onClick={() => setSelected(m.id)}>
+          <button
+            className={`card meeting-card ${m.status}`}
+            key={m.id}
+            onClick={() => setSelected(m.id)}
+          >
             <div className="meeting-date">
               <strong>{dateLabel(m.starts_at, 'dd')}</strong>
               <span>{dateLabel(m.starts_at, 'MMM')}</span>
@@ -196,18 +201,37 @@ export function MeetingDetail({
               </a>
             )
           )}
-          {c && (
-            <External
-              href={whatsapp(
-                c.phone,
-                `Hola, ${c.contact_name || c.name}. Te compartimos la reunión de PULSO: ${m.title}, el ${dateLabel(m.starts_at, 'd MMMM yyyy')} de ${dateLabel(m.starts_at, 'HH:mm')} a ${dateLabel(m.ends_at, 'HH:mm')} (${Intl.DateTimeFormat().resolvedOptions().timeZone}). ${m.location || ''}`,
-              )}
-            >
-              <MessageCircle size={17} />
-              Compartir por WhatsApp
-            </External>
-          )}
         </div>
+        <section className="meeting-section whatsapp-recipients">
+          <h3>
+            <MessageCircle size={18} /> Avisar por WhatsApp
+          </h3>
+          <p className="muted">
+            {c ? 'Contacto de la empresa.' : 'Participantes de esta reunión interna.'} Abrí el
+            mensaje preparado y enviá desde WhatsApp.
+          </p>
+          {meetingWhatsapp(m, data).map((p) => (
+            <div key={p.id} className="whatsapp-recipient">
+              <strong>{p.name}</strong>
+              {p.url ? (
+                <External href={p.url}>
+                  <MessageCircle size={16} /> Enviar aviso
+                </External>
+              ) : (
+                <span className="field-hint">
+                  Falta un teléfono válido con código de país en {c ? 'la empresa' : 'su perfil'}.
+                </span>
+              )}
+            </div>
+          ))}
+          {!c && !m.attendees.length && (
+            <p className="field-hint">Agregá participantes a la reunión para avisarles.</p>
+          )}
+          <p className="field-hint">
+            Los participantes de PULSO también reciben el aviso en la app. Los avisos al dispositivo
+            requieren sus notificaciones activadas.
+          </p>
+        </section>
         <div className="meeting-section">
           <h3>Temas para conversar</h3>
           <p className="preserve-lines">{m.notes || 'Sin temas cargados.'}</p>
@@ -345,6 +369,7 @@ export function Agenda({ open }: { open: OpenForm }) {
     [company, setCompany] = useState(''),
     [state, setState] = useState('all')
   const calendarRef = useRef<HTMLDivElement>(null)
+  const daySlotsRef = useRef<HTMLDivElement>(null)
   const week = Array.from({ length: 7 }, (_, i) =>
     addDays(startOfWeek(date, { weekStartsOn: 1 }), i),
   )
@@ -368,11 +393,23 @@ export function Agenda({ open }: { open: OpenForm }) {
   useEffect(() => {
     if (calendarRef.current) calendarRef.current.scrollTop = 8 * 48
   }, [mode])
+  useEffect(() => {
+    if (daySlotsRef.current) daySlotsRef.current.scrollTop = 4 * 52
+  }, [mode, date])
   const shift = (n: number) =>
     setDate((d) =>
       mode === 'month' ? addMonths(d, n) : mode === 'day' ? addDays(d, n) : addWeeks(d, n),
     )
   const show = (m: Meeting) => setParams({ reunion: m.id })
+  const createAt = (day: Date, time: string) =>
+    open({
+      kind: 'meeting',
+      initial: {
+        date: format(day, 'yyyy-MM-dd'),
+        time,
+        ...(company ? { company_id: company } : {}),
+      },
+    })
   return (
     <>
       <PageTitle
@@ -380,7 +417,7 @@ export function Agenda({ open }: { open: OpenForm }) {
         title="Agenda"
         description="Nuestras reuniones, con todo el contexto a mano."
         action={
-          <button className="button primary" onClick={() => open({ kind: 'meeting' })}>
+          <button className="button primary" onClick={() => createAt(date, '09:00')}>
             <Plus size={18} />
             Agendar reunión
           </button>
@@ -537,9 +574,12 @@ export function Agenda({ open }: { open: OpenForm }) {
                 {week.map((d) => (
                   <div className="week-day" key={d.toISOString()}>
                     {Array.from({ length: 24 }, (_, h) => (
-                      <div
+                      <button
+                        type="button"
                         className="hour-slot"
                         key={h}
+                        aria-label={`Agendar ${dateLabel(format(d, 'yyyy-MM-dd'), 'EEEE d MMMM')} a las ${String(h).padStart(2, '0')}:00`}
+                        onClick={() => createAt(d, `${String(h).padStart(2, '0')}:00`)}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => {
                           e.preventDefault()
@@ -557,45 +597,77 @@ export function Agenda({ open }: { open: OpenForm }) {
                               },
                             })
                         }}
-                      />
+                      >
+                        <span>+ {String(h).padStart(2, '0')}:00</span>
+                      </button>
                     ))}
-                    {filtered
-                      .filter((m) => isSameDay(new Date(m.starts_at), d))
-                      .map((m) => {
-                        const start = new Date(m.starts_at)
-                        return (
-                          <button
-                            draggable
-                            onDragStart={(e) => e.dataTransfer.setData('text/plain', m.id)}
-                            className={`calendar-event ${m.status}`}
-                            key={m.id}
-                            style={{
-                              top: (start.getHours() + start.getMinutes() / 60) * 48,
-                              height: Math.max(
-                                36,
-                                (differenceInMinutes(new Date(m.ends_at), start) / 60) * 48 - 2,
-                              ),
-                            }}
-                            onClick={() => show(m)}
-                          >
-                            <small>{dateLabel(m.starts_at, 'HH:mm')}</small>
-                            <strong>{m.title}</strong>
-                            <span>
-                              {data.companies.find((c) => c.id === m.company_id)?.name || 'PULSO'}
-                            </span>
-                          </button>
-                        )
-                      })}
+                    {layoutMeetings(
+                      filtered.filter((m) => isSameDay(new Date(m.starts_at), d)),
+                    ).map(({ meeting: m, lane, columns }) => {
+                      const start = new Date(m.starts_at)
+                      return (
+                        <button
+                          draggable
+                          onDragStart={(e) => e.dataTransfer.setData('text/plain', m.id)}
+                          className={`calendar-event ${m.status}`}
+                          key={m.id}
+                          title={`${m.title} · ${dateLabel(m.starts_at, 'HH:mm')} – ${dateLabel(m.ends_at, 'HH:mm')}`}
+                          style={{
+                            left: `calc(${(lane * 100) / columns}% + 3px)`,
+                            width: `calc(${100 / columns}% - 6px)`,
+                            right: 'auto',
+                            top: (start.getHours() + start.getMinutes() / 60) * 48,
+                            height: Math.max(
+                              36,
+                              (differenceInMinutes(new Date(m.ends_at), start) / 60) * 48 - 2,
+                            ),
+                          }}
+                          onClick={() => show(m)}
+                        >
+                          <small>{dateLabel(m.starts_at, 'HH:mm')}</small>
+                          <strong>{m.title}</strong>
+                          <span>
+                            {data.companies.find((c) => c.id === m.company_id)?.name || 'PULSO'}
+                          </span>
+                        </button>
+                      )
+                    })}
                   </div>
                 ))}
               </div>
             </div>
             <footer className="calendar-hint">
-              Arrastrá una reunión a otro horario para revisar su reprogramación.
+              Hacé clic en un horario para agendar. Arrastrá una reunión para reprogramarla.
             </footer>
           </div>
         )}
       </div>
+      {!search && (
+        <section className={`card day-slot-card ${mode === 'week' ? 'mobile-only' : ''}`}>
+          <div className="section-heading">
+            <h2>Agendar el {dateLabel(format(date, 'yyyy-MM-dd'), 'd MMMM')}</h2>
+          </div>
+          <p className="muted">
+            Elegí la hora de inicio. Vas a revisar los datos antes de confirmar.
+          </p>
+          <div className="day-slots" ref={daySlotsRef} aria-label="Horarios para agendar">
+            {Array.from({ length: 48 }, (_, n) => {
+              const time = `${String(Math.floor(n / 2)).padStart(2, '0')}:${n % 2 ? '30' : '00'}`
+              return (
+                <button
+                  className="button secondary"
+                  key={time}
+                  onClick={() => createAt(date, time)}
+                  aria-label={`Agendar a las ${time}`}
+                >
+                  <Plus size={14} />
+                  {time}
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      )}
       <section className={mode === 'week' && !search ? 'agenda-day-list mobile-only' : ''}>
         <div className="section-heading">
           <h2>
@@ -626,7 +698,7 @@ export function Agenda({ open }: { open: OpenForm }) {
         )}
       </section>
       {!search && mode === 'week' && (
-        <section className="mobile-only">
+        <section className="agenda-upcoming">
           <div className="section-heading">
             <h2>Próximas reuniones</h2>
           </div>

@@ -30,6 +30,7 @@ export function Wizard({
   title,
   steps,
   initial,
+  contextValues,
   draftId,
   onClose,
   onSave,
@@ -39,6 +40,7 @@ export function Wizard({
   title: string
   steps: Step[]
   initial: Values
+  contextValues?: Values
   draftId: string
   onClose: () => void
   onSave: (v: Values) => Promise<void>
@@ -49,9 +51,9 @@ export function Wizard({
   const key = `pulso-draft-${user?.id}-${draftId}`
   const [values, setValues] = useState<Values>(() => {
       try {
-        return { ...initial, ...JSON.parse(localStorage.getItem(key) || '{}') }
+        return { ...initial, ...JSON.parse(localStorage.getItem(key) || '{}'), ...contextValues }
       } catch {
-        return initial
+        return { ...initial, ...contextValues }
       }
     }),
     [step, setStep] = useState(0),

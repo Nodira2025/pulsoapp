@@ -46,6 +46,7 @@ import { FirstPassword, Profile } from './pages/Profile'
 import { AppUpdate } from './components/AppUpdate'
 import { ThemeControl, ThemeProvider } from './lib/theme'
 import { DeviceProvider } from './components/DeviceSetup'
+import { AttentionBrief } from './components/AttentionBrief'
 
 const nav = [
   { to: '/', name: 'Inicio', icon: LayoutDashboard },
@@ -439,6 +440,17 @@ function Shell() {
       {notices && (
         <Modal title="Tus notificaciones" onClose={() => setNotices(false)}>
           <div className="padded">
+            <button
+              className="button secondary full"
+              onClick={() => {
+                setNotices(false)
+                window.dispatchEvent(new Event('pulso:show-attention'))
+              }}
+            >
+              Ver tareas, reuniones y cobros próximos
+            </button>
+          </div>
+          <div className="padded">
             {unread > 0 && (
               <button
                 className="text-button"
@@ -500,6 +512,7 @@ export default function App() {
         <DeviceProvider>
           <HashRouter>
             <Shell />
+            <AttentionBrief />
             <AppUpdate />
           </HashRouter>
         </DeviceProvider>

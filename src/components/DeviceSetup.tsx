@@ -22,6 +22,9 @@ type DeviceState = {
   install: () => Promise<void>
   togglePush: () => Promise<void>
   show: () => void
+  onboardingOpen: boolean
+  onboardingReady: boolean
+  onboardingHandled: boolean
 }
 const DeviceContext = createContext<DeviceState | null>(null)
 export function useDevice() {
@@ -30,22 +33,41 @@ export function useDevice() {
 export function DeviceProvider({ children }: { children: ReactNode }) {
   const { user, toast } = useStore()
   const [prompt, setPrompt] = useState<InstallEvent | null>(null)
-  const [installed, setInstalled] = useState(standalone)
+  const [installed, setInstalled] = useState(() => {
+    if (standalone()) return true
+    try {
+      return localStorage.getItem('pulso-installed') === '1'
+    } catch {
+      return false
+    }
+  })
   const [pushOn, setPushOn] = useState(false)
   const [permission, setPermission] = useState<NotificationPermission>('default')
   const [busy, setBusy] = useState('')
   const [visible, setVisible] = useState(false)
   const [ready, setReady] = useState(false)
+  const [handled, setHandled] = useState(false)
   useEffect(() => {
     const offer = (e: Event) => {
       e.preventDefault()
       setPrompt(e as InstallEvent)
       setInstalled(false)
+      try {
+        localStorage.removeItem('pulso-installed')
+      } catch {
+        /* Optional installation hint. */
+      }
     }
     const done = () => {
       setInstalled(true)
       setPrompt(null)
+      try {
+        localStorage.setItem('pulso-installed', '1')
+      } catch {
+        /* Optional installation hint. */
+      }
     }
+    if (standalone()) done()
     window.addEventListener('beforeinstallprompt', offer)
     window.addEventListener('appinstalled', done)
     return () => {
@@ -58,6 +80,15 @@ export function DeviceProvider({ children }: { children: ReactNode }) {
     setReady(false)
     setVisible(false)
     setPushOn(false)
+    try {
+      setHandled(
+        !!user &&
+          Date.now() - Number(localStorage.getItem(`pulso-device-dismissed:${user.id}`)) <
+            7 * 86400000,
+      )
+    } catch {
+      setHandled(false)
+    }
     const refresh = async () => {
       if (supportsPush()) {
         if (active) setPermission(Notification.permission)
@@ -88,7 +119,7 @@ export function DeviceProvider({ children }: { children: ReactNode }) {
     }
   }, [user?.id])
   useEffect(() => {
-    if (!user || user.must_change_password || !ready || (installed && pushOn)) return
+    if (!user || user.must_change_password || !ready || installed) return
     let dismissed = 0
     try {
       dismissed = Number(localStorage.getItem(`pulso-device-dismissed:${user.id}`))
@@ -103,6 +134,7 @@ export function DeviceProvider({ children }: { children: ReactNode }) {
   }, [user?.id, user?.must_change_password, ready, installed, pushOn])
   function dismiss() {
     setVisible(false)
+    setHandled(true)
     if (user)
       try {
         localStorage.setItem(`pulso-device-dismissed:${user.id}`, String(Date.now()))
@@ -161,6 +193,9 @@ export function DeviceProvider({ children }: { children: ReactNode }) {
         install,
         togglePush,
         show: () => setVisible(true),
+        onboardingOpen: visible,
+        onboardingReady: ready,
+        onboardingHandled: handled,
       }}
     >
       {children}

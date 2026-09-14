@@ -15,6 +15,9 @@ Espacio de trabajo compartido para el equipo de PULSO. Interfaz de escritorio co
 - Novedades generales o asociadas a una empresa/proyecto; menciones, comentarios, vistos, adjuntos y conversión a tareas.
 - Formularios guiados, borradores locales por usuario, dictado por voz cuando el navegador lo admite y revisión antes de guardar.
 - Agenda con búsqueda, filtros, vistas de día/semana/mes, reuniones internas o de clientes, creación rápida de empresas, detección de cruces, series semanales/mensuales, reprogramación con historial y registro de resultados.
+- Creación desde un horario de la semana o desde las franjas de media hora del día elegido en celular. Los eventos tienen alto contraste y las superposiciones se distribuyen en columnas.
+- WhatsApp desde el detalle de la reunión: contacto de la empresa o participantes de una reunión interna. Requiere teléfonos con código de país; abre un mensaje preparado para que el usuario confirme su envío. No envía mensajes automáticamente.
+- Resumen de tareas por vencer o atrasadas, reuniones de hoy y mañana, cuotas pendientes hasta mañana y novedades sin leer. Aparece después de la bienvenida o directamente si la app ya está instalada, una vez por día y pestaña; también se abre desde la campana.
 - Cuotas independientes de los pagos recibidos, pagos parciales, saldo controlado en el servidor, comprobantes privados y preparación de mensajes para WhatsApp. Importes expresados en ARS.
 - Gastos generales o por empresa/proyecto, responsable del pago y comprobante.
 - Notificaciones internas en tiempo real y Web Push. Recordatorios de reuniones, tareas y cuotas mediante Supabase Cron. Instalación como PWA en navegadores compatibles.
@@ -64,6 +67,8 @@ supabase functions deploy dispatch-notifications --project-ref ckcbxnhwpnvhpskcu
 ```
 
 Cron evalúa los recordatorios cada minuto. Las reuniones se muestran en la hora local del dispositivo; los recordatorios diarios de tareas y cuotas se generan desde las 09:00 de Argentina. Las series se materializan en 2 a 12 reuniones; editar una modifica solo esa fecha. Los cruces advierten y requieren que quien agenda confirme la superposición.
+
+La migración `202609140005_advance_reminders.sql` incorpora avisos el día anterior al vencimiento de tareas y cuotas, además del día de vencimiento y los atrasados. Incluye reuniones de mañana desde las 09:00 y mantiene el aviso previo configurado en cada reunión. Los participantes con aviso de 24 horas no reciben un segundo recordatorio de «mañana». Las claves de `reminder_log` evitan duplicados en cada ejecución de Cron. El resumen dentro de la app usa la fecha local del dispositivo.
 
 Las notificaciones dependen de permisos del navegador y del sistema operativo, conectividad y restricciones de batería. Web Push permite entregarlas cuando la página está cerrada, sin prometer entrega a una hora exacta. El dictado usa el servicio de reconocimiento del navegador y puede requerir conexión. Si no está disponible, se puede escribir o usar el dictado del teclado.
 

@@ -1,0 +1,234 @@
+/* Explicit variants maintain contrast in both themes. */
+:root .calendar-event,
+:root[data-theme='dark'] .calendar-event {
+  background: #5140be;
+  color: #fff;
+  border: 1px solid #9686f1;
+  border-left: 4px solid #54d4ed;
+  box-shadow: 0 3px 10px #24145230;
+  border-radius: 7px;
+  gap: 2px;
+}
+:root .calendar-event strong {
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+:root .calendar-event small {
+  font-size: 0.68rem;
+  color: #fff;
+  font-weight: 700;
+}
+:root .calendar-event > span {
+  font-size: 0.65rem;
+  color: #e0e7ff;
+}
+:root .calendar-event.completed {
+  background: #14634d;
+  border-color: #53b596;
+}
+:root .calendar-event.cancelled,
+:root .calendar-event.missed {
+  background: #465268;
+  border-color: #8c98ac;
+  opacity: 1;
+}
+:root .calendar-event:hover,
+:root .calendar-event:focus-visible {
+  z-index: 4;
+  min-width: 140px;
+  height: auto !important;
+  min-height: 70px;
+  box-shadow: 0 5px 16px #0005;
+}
+:root .month-event {
+  background: #5845c4;
+  color: #fff;
+  font-weight: 650;
+  padding: 5px 6px;
+  border-left: 3px solid #56d6ec;
+}
+:root .month-event.completed {
+  background: #16694f;
+}
+:root .month-event.cancelled,
+:root .month-event.missed {
+  background: #536076;
+}
+:root .meeting-card.scheduled {
+  border-left: 5px solid #7053db;
+  background: #f4f1ff;
+}
+:root .meeting-card.completed {
+  border-left: 5px solid #188365;
+}
+:root .meeting-card.cancelled,
+:root .meeting-card.missed {
+  border-left: 5px solid #7c879c;
+}
+:root .meeting-card.scheduled .meeting-date {
+  color: #fff;
+  background: #5845be;
+}
+:root .meeting-card .meta {
+  font-size: 0.8rem;
+}
+:root .meeting-card.scheduled .grow > span {
+  color: #52617d;
+}
+:root[data-theme='dark'] .meeting-card.scheduled {
+  background: #211d43;
+  border-color: #7963d5;
+}
+:root[data-theme='dark'] .meeting-card.scheduled .grow > span {
+  color: #bbc9e4;
+}
+:root .mobile-week .has-meetings {
+  background: #7053db;
+  width: 7px;
+  height: 7px;
+}
+:root .mobile-week .active .has-meetings {
+  background: #fff;
+}
+.hour-slot {
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+}
+.hour-slot > span {
+  opacity: 0;
+  font-size: 0.7rem;
+  padding: 8px;
+}
+:root .hour-slot:hover,
+:root .hour-slot:focus-visible {
+  background: #ebe6ff;
+}
+:root[data-theme='dark'] .hour-slot:hover,
+:root[data-theme='dark'] .hour-slot:focus-visible {
+  background: #30244f;
+}
+.hour-slot:hover > span,
+.hour-slot:focus-visible > span {
+  opacity: 1;
+}
+.day-slot-card {
+  padding: 20px;
+  margin: 20px 0;
+}
+.day-slot-card > p {
+  font-size: 0.85rem;
+  margin: 0 0 12px;
+}
+.day-slots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  max-height: 210px;
+  overflow-y: auto;
+}
+.day-slots .button {
+  min-height: 44px;
+  padding: 8px 4px;
+  font-size: 0.8rem;
+}
+.whatsapp-recipients h3 {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.whatsapp-recipients > p {
+  font-size: 0.85rem;
+}
+.whatsapp-recipient {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.whatsapp-recipient .external {
+  color: #157455;
+  font-weight: 650;
+}
+:root[data-theme='dark'] .whatsapp-recipient .external {
+  color: #70ddba;
+}
+.attention-counts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 20px 0 10px;
+}
+.attention-counts > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.attention-counts strong {
+  font-size: 1.4rem;
+}
+.attention-counts span {
+  width: 100%;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.attention-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-left: 4px solid #7760da;
+  border-radius: 12px;
+  background: var(--surface);
+  margin: 12px 0;
+}
+.attention-item.urgent {
+  border-left-color: #e29b35;
+}
+.attention-item > span {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.attention-item small {
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+.attention-item span span {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.attention-heading {
+  margin-top: 24px;
+}
+.attention-brief > .button {
+  margin-top: 16px;
+}
+@media (max-width: 760px) {
+  .day-slot-card {
+    padding: 16px;
+  }
+  .attention-counts > div {
+    padding: 10px;
+  }
+  .month-event {
+    font-size: 0.6rem;
+  }
+}

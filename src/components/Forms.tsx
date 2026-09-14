@@ -707,6 +707,15 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
       title={title}
       steps={steps}
       initial={initial}
+      contextValues={
+        kind === 'meeting' && !request.id
+          ? Object.fromEntries(
+              ['date', 'time']
+                .filter((k) => request.initial?.[k] !== undefined)
+                .map((k) => [k, request.initial![k]]),
+            )
+          : undefined
+      }
       draftId={`${kind}-${request.id || request.initial?.project_id || request.initial?.company_id || 'new'}`}
       onClose={onClose}
       onSave={save}
