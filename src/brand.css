@@ -1,0 +1,230 @@
+:root {
+  color-scheme: light;
+  --brand-gradient: linear-gradient(110deg, #7929e8, #3c43e8 55%, #087ee7);
+}
+.primary,
+.fab {
+  background: var(--brand-gradient);
+  color: #fff;
+  box-shadow: 0 5px 18px #603bdb26;
+}
+.primary:hover,
+.fab:hover {
+  background: linear-gradient(110deg, #6b22ce, #343ad2 55%, #096ccd);
+}
+.login-story {
+  background:
+    radial-gradient(ellipse at 90% 15%, #44228477, transparent 55%),
+    radial-gradient(ellipse at 10% 80%, #004c7433, transparent 50%), #010819;
+}
+.login-story h1 em {
+  color: #baa2ff;
+}
+.login-story-copy p {
+  color: #b1c1d9;
+}
+.login-story .eyebrow {
+  color: #81d8f0;
+}
+.login-theme {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 2;
+}
+.theme-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0 10px;
+  background: var(--surface);
+  color: var(--muted);
+}
+.theme-control select {
+  background: transparent;
+  border: 0;
+  padding: 8px 22px 8px 0;
+  width: 124px;
+  min-height: 42px;
+  color: inherit;
+  font-size: 0.8125rem;
+}
+.theme-full {
+  width: 100%;
+}
+.theme-full select {
+  flex: 1;
+  width: auto;
+}
+.device-hero {
+  text-align: center;
+  padding: 8px 0 16px;
+}
+.device-hero img {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 18px;
+  margin: 0 auto 12px;
+  box-shadow: 0 8px 30px #5932bd33;
+}
+.device-hero h2 {
+  font-size: 1.45rem;
+  margin: 10px 0;
+  line-height: 1.2;
+}
+.device-hero em {
+  font-style: normal;
+  color: #6852d7;
+}
+.device-hero p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+.device-actions {
+  display: grid;
+  gap: 14px;
+  margin: 12px 0 20px;
+}
+.device-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.device-step > div:last-child {
+  flex: 1;
+  min-width: 0;
+}
+.device-step-icon {
+  color: #7060d8;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  min-width: 32px;
+  height: 36px;
+}
+.device-step h3 {
+  margin: 2px 0 6px;
+}
+.device-step p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.device-step p:last-child {
+  margin-bottom: 0;
+}
+.device-step .install-guide {
+  border-left: 2px solid #8d7be9;
+  padding-left: 12px;
+}
+.install-guide summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--blue);
+  padding: 8px 0;
+}
+.install-guide p {
+  margin-top: 8px;
+}
+:root[data-theme='dark'] .modal {
+  background: #081326;
+  color: #e6edfa;
+}
+.device-step .button {
+  white-space: normal;
+  text-align: left;
+}
+.device-setup > .field-hint {
+  text-align: center;
+}
+:root[data-theme='dark'] .app-shell {
+  background: radial-gradient(ellipse at 95% 0%, #38237222, transparent 48%), #010819;
+}
+:root[data-theme='dark'] .sidebar {
+  background: #061025;
+}
+:root[data-theme='dark'] .topbar,
+:root[data-theme='dark'] .bottom-nav {
+  background: #071225ed;
+}
+:root[data-theme='dark'] .login-page,
+:root[data-theme='dark'] .login-form-side,
+:root[data-theme='dark'] .auth-page {
+  background: #010819;
+}
+:root[data-theme='dark'] .auth-card {
+  background: var(--surface);
+}
+:root[data-theme='dark'] .primary,
+:root[data-theme='dark'] .fab {
+  color: #fff;
+  background: var(--brand-gradient);
+}
+:root[data-theme='dark'] .device-hero em {
+  color: #baa2ff;
+}
+:root[data-theme='dark'] .device-step-icon {
+  color: #a899f4;
+}
+:root[data-theme='dark'] .device-step h3 {
+  color: #ecf2ff;
+}
+:root[data-theme='dark'] .theme-control select {
+  border: 0;
+  color: #c0cde3;
+  background: transparent;
+}
+:root[data-theme='dark'] .theme-control option {
+  background: #0d192f;
+  color: #e6edfa;
+}
+:root[data-theme='dark'] .mobile-week button.active {
+  background: #6650d0;
+  color: #fff;
+}
+@media (max-width: 760px) {
+  .theme-control {
+    padding: 0 7px;
+    gap: 4px;
+  }
+  .theme-control select {
+    width: 104px;
+    font-size: 0.75rem;
+  }
+  .theme-full select {
+    width: auto;
+  }
+  .login-theme {
+    right: 18px;
+    top: 16px;
+  }
+  .device-step {
+    padding: 14px;
+    gap: 8px;
+  }
+  .device-step-icon {
+    width: 24px;
+    min-width: 24px;
+  }
+  .device-hero h2 {
+    font-size: 1.45rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -6,6 +6,9 @@ Espacio de trabajo compartido para el equipo de PULSO. Interfaz de escritorio co
 
 ## Incluye
 
+- Apariencia día, noche o automática, con preferencia guardada en el dispositivo. Colores y degradados alineados con la web de PULSO.
+- Bienvenida para instalar la PWA y activar notificaciones. Ofrece instalación nativa cuando el navegador la permite, instrucciones alternativas y ayuda si el permiso está bloqueado. «Ahora no» pospone el aviso siete días; se puede reabrir desde Mi perfil.
+
 - Perfiles con foto, nombre, teléfono y presentación. Acceso individual con Supabase Auth. Cambio de contraseña temporal al primer ingreso.
 - Empresas con logo, contacto, ubicación, redes, notas y archivos. Se conserva quién las incorporó.
 - Múltiples proyectos por empresa: responsables, presupuesto, fechas, estado, tareas, avance calculado y Gantt. Enlaces a GitHub y al sitio publicado.

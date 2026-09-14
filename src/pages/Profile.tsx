@@ -1,24 +1,12 @@
-import { useEffect, useState, type FormEvent } from 'react'
-import {
-  Plus,
-  Camera,
-  Bell,
-  Download,
-  LogOut,
-  ShieldCheck,
-  UserRound,
-  LockKeyhole,
-} from 'lucide-react'
+import { useState, type FormEvent } from 'react'
+import { Plus, Camera, LogOut, ShieldCheck, UserRound, LockKeyhole } from 'lucide-react'
 import { useStore } from '../lib/store'
 import { supabase, upload } from '../lib/supabase'
-import { enablePush, disablePush, supportsPush } from '../lib/push'
+import { DeviceActions, useDevice } from '../components/DeviceSetup'
+import { ThemeControl } from '../lib/theme'
 import { messageOf } from '../lib/utils'
 import { PageTitle, Avatar } from '../components/UI'
 import type { OpenForm } from './Feed'
-type InstallEvent = Event & {
-  prompt: () => Promise<void>
-  userChoice: Promise<{ outcome: string }>
-}
 export function PasswordForm({ required = false }: { required?: boolean }) {
   const { refresh, toast } = useStore()
   const [password, setPassword] = useState(''),
@@ -119,23 +107,8 @@ export function Profile({ open }: { open: OpenForm }) {
     [phone, setPhone] = useState(user!.phone),
     [bio, setBio] = useState(user!.bio),
     [minutes, setMinutes] = useState(user!.reminder_minutes),
-    [busy, setBusy] = useState(false),
-    [pushOn, setPushOn] = useState(false),
-    [pushBusy, setPushBusy] = useState(false),
-    [install, setInstall] = useState<InstallEvent | null>(null)
-  useEffect(() => {
-    if ('serviceWorker' in navigator)
-      void navigator.serviceWorker
-        .getRegistration()
-        .then((r) => r?.pushManager.getSubscription())
-        .then((s) => setPushOn(!!s))
-    const handler = (e: Event) => {
-      e.preventDefault()
-      setInstall(e as InstallEvent)
-    }
-    window.addEventListener('beforeinstallprompt', handler)
-    return () => window.removeEventListener('beforeinstallprompt', handler)
-  }, [])
+    [busy, setBusy] = useState(false)
+  const device = useDevice()
   async function save(e: FormEvent) {
     e.preventDefault()
     setBusy(true)
@@ -244,71 +217,18 @@ export function Profile({ open }: { open: OpenForm }) {
         </section>
         <aside>
           <section className="card padded">
-            <h3>
-              <Bell size={18} /> Notificaciones
-            </h3>
+            <h3>Apariencia</h3>
             <p className="muted">
-              Recibí avisos de menciones, tareas y reuniones en este dispositivo.
+              Elegí modo día, noche o seguir la configuración de tu dispositivo.
             </p>
-            <button
-              className="button secondary"
-              disabled={pushBusy || !supportsPush()}
-              onClick={async () => {
-                setPushBusy(true)
-                try {
-                  if (pushOn) {
-                    await disablePush()
-                    setPushOn(false)
-                    toast('Notificaciones desactivadas en este dispositivo.')
-                  } else {
-                    await enablePush(user!.id)
-                    setPushOn(true)
-                    toast('Notificaciones activadas.')
-                  }
-                } catch (e) {
-                  toast(messageOf(e))
-                } finally {
-                  setPushBusy(false)
-                }
-              }}
-            >
-              <Bell size={17} />
-              {pushBusy
-                ? 'Configurando…'
-                : pushOn
-                  ? 'Desactivar notificaciones'
-                  : 'Activar notificaciones'}
-            </button>
-            {!supportsPush() && (
-              <p className="field-hint">
-                Este navegador no admite notificaciones del dispositivo. Los avisos siguen
-                disponibles en la campana.
-              </p>
-            )}
+            <ThemeControl full />
           </section>
           <section className="card padded">
-            <h3>
-              <Download size={18} /> PULSO como app
-            </h3>
-            <p className="muted">
-              Agregala a tu pantalla de inicio o instalala desde el menú del navegador.
-            </p>
-            {install && (
-              <button
-                className="button secondary"
-                onClick={async () => {
-                  await install.prompt()
-                  await install.userChoice
-                  setInstall(null)
-                }}
-              >
-                Instalar PULSO
-              </button>
-            )}
-            <p className="field-hint">
-              En Android: Chrome → menú → Agregar a la pantalla de inicio. En Windows: menú de
-              Chrome o Edge → Instalar PULSO.
-            </p>
+            <h3>PULSO en tu dispositivo</h3>
+            <DeviceActions />
+            <button className="text-button" onClick={device.show}>
+              Ver guía de instalación y avisos
+            </button>
           </section>
           <section className="card padded">
             <h3>

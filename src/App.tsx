@@ -44,6 +44,8 @@ import { Agenda } from './pages/Agenda'
 import { Finances } from './pages/Finances'
 import { FirstPassword, Profile } from './pages/Profile'
 import { AppUpdate } from './components/AppUpdate'
+import { ThemeControl, ThemeProvider } from './lib/theme'
+import { DeviceProvider } from './components/DeviceSetup'
 
 const nav = [
   { to: '/', name: 'Inicio', icon: LayoutDashboard },
@@ -79,6 +81,9 @@ function Login() {
   }
   return (
     <div className="login-page">
+      <div className="login-theme">
+        <ThemeControl />
+      </div>
       <section className="login-story">
         <img
           className="login-logo"
@@ -321,6 +326,7 @@ function Shell() {
             <kbd>↵</kbd>
           </form>
           <div className="topbar-actions">
+            <ThemeControl />
             <span className="team-tag">Equipo PULSO</span>
             <button
               className="icon-button notification-button"
@@ -489,11 +495,15 @@ function Shell() {
 }
 export default function App() {
   return (
-    <StoreProvider>
-      <HashRouter>
-        <Shell />
-        <AppUpdate />
-      </HashRouter>
-    </StoreProvider>
+    <ThemeProvider>
+      <StoreProvider>
+        <DeviceProvider>
+          <HashRouter>
+            <Shell />
+            <AppUpdate />
+          </HashRouter>
+        </DeviceProvider>
+      </StoreProvider>
+    </ThemeProvider>
   )
 }

@@ -1,0 +1,712 @@
+/* Dark surface, text, border and status variants for every app screen. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  color: #e6edfa;
+  background: #010819;
+  --surface: #0d192f;
+  --border: #263650;
+  --muted: #a4b2cc;
+  --blue: #a59dff;
+  --blue-dark: #7771eb;
+}
+:root[data-theme='dark'] .update-notice {
+  background: #0d192f;
+  border: 1px solid #2a3953;
+}
+:root[data-theme='dark'] input,
+:root[data-theme='dark'] select,
+:root[data-theme='dark'] textarea {
+  border: 1px solid #2a3953;
+  background: #0d192f;
+  color: #d9dee8;
+}
+:root[data-theme='dark'] input::placeholder,
+:root[data-theme='dark'] textarea::placeholder {
+  color: #a9aeb8;
+}
+:root[data-theme='dark'] input:disabled {
+  background: #0d192f;
+}
+:root[data-theme='dark'] h1,
+:root[data-theme='dark'] h2,
+:root[data-theme='dark'] h3,
+:root[data-theme='dark'] h4 {
+  color: #dbe0ea;
+}
+:root[data-theme='dark'] .skip-link {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .eyebrow {
+  color: #b4b9c3;
+}
+:root[data-theme='dark'] .secondary {
+  border: 1px solid #2a3953;
+  background: #0d192f;
+  color: #c7ccd6;
+}
+:root[data-theme='dark'] .secondary:hover {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .icon-button:hover {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .text-button:hover {
+  color: #878dd4;
+}
+:root[data-theme='dark'] .avatar {
+  background: #0c132a;
+  color: #a89ed1;
+}
+:root[data-theme='dark'] .tone-0 {
+  background: #0d132b;
+  color: #ad9bd0;
+}
+:root[data-theme='dark'] .tone-1 {
+  background: #141623;
+  color: #c7a895;
+}
+:root[data-theme='dark'] .tone-2 {
+  background: #0c162b;
+  color: #9aaeca;
+}
+:root[data-theme='dark'] .tone-3 {
+  background: #0d192f;
+  color: #c0c5cf;
+}
+:root[data-theme='dark'] .tone-4 {
+  background: #0d192f;
+  color: #b4b9c3;
+}
+:root[data-theme='dark'] .avatar-stack .avatar {
+  border: 2px solid #2a3953;
+}
+:root[data-theme='dark'] .badge {
+  background: #0d192f;
+  color: #bbc0ca;
+}
+:root[data-theme='dark'] .badge.active,
+:root[data-theme='dark'] .badge.doing,
+:root[data-theme='dark'] .badge.scheduled {
+  background: #0d192f;
+  color: #9fa5da;
+}
+:root[data-theme='dark'] .badge.planning,
+:root[data-theme='dark'] .badge.todo {
+  background: #0d192f;
+  color: #b3b8c2;
+}
+:root[data-theme='dark'] .badge.waiting,
+:root[data-theme='dark'] .badge.medium {
+  background: #161923;
+  color: #c4af87;
+}
+:root[data-theme='dark'] .badge.completed,
+:root[data-theme='dark'] .badge.done,
+:root[data-theme='dark'] .badge.low {
+  background: #0d192f;
+  color: #c1c6d0;
+}
+:root[data-theme='dark'] .badge.blocked,
+:root[data-theme='dark'] .badge.high,
+:root[data-theme='dark'] .badge.missed {
+  background: #0d192f;
+  color: #d3a2a4;
+}
+:root[data-theme='dark'] .badge.cancelled,
+:root[data-theme='dark'] .badge.archived {
+  background: #0d192f;
+  color: #b5bac4;
+}
+:root[data-theme='dark'] .badge.note {
+  background: #0d192f;
+  color: #b3b8c2;
+}
+:root[data-theme='dark'] .blue {
+  background: #0d192f;
+  color: #a6abe8;
+}
+:root[data-theme='dark'] .purple {
+  background: #0d192f;
+  color: #beacdf;
+}
+:root[data-theme='dark'] .green {
+  background: #0d192f;
+  color: #99c1b1;
+}
+:root[data-theme='dark'] .orange {
+  background: #141723;
+  color: #ddbea1;
+}
+:root[data-theme='dark'] .sidebar {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .brand > span {
+  color: #d9dee8;
+}
+:root[data-theme='dark'] .brand small {
+  color: #abb0ba;
+}
+:root[data-theme='dark'] .workspace-chip {
+  background: #0d192f;
+  border: 1px solid #2a3953;
+}
+:root[data-theme='dark'] .workspace-icon {
+  background: #0d192f;
+  color: #a8acdb;
+}
+:root[data-theme='dark'] .workspace-chip small {
+  color: #adb2bc;
+}
+:root[data-theme='dark'] .workspace-chip svg {
+  color: #afb4be;
+}
+:root[data-theme='dark'] .nav-label {
+  color: #a6abb5;
+}
+:root[data-theme='dark'] .sidebar nav a {
+  color: #b7bcc6;
+}
+:root[data-theme='dark'] .sidebar nav a:hover {
+  background: #0d192f;
+  color: #989ee9;
+}
+:root[data-theme='dark'] .sidebar nav a.active {
+  background: #0d192f;
+  color: #9ca1e3;
+}
+:root[data-theme='dark'] .nav-count {
+  background: #0c142c;
+  color: #a5abe5;
+}
+:root[data-theme='dark'] .team-presence {
+  color: #acb1bb;
+}
+:root[data-theme='dark'] .profile-link small {
+  color: #aaafb9;
+}
+:root[data-theme='dark'] .profile-link > svg {
+  color: #aaafb9;
+}
+:root[data-theme='dark'] .topbar {
+  background: #0d192fd9;
+}
+:root[data-theme='dark'] .breadcrumb {
+  color: #a6abb5;
+}
+:root[data-theme='dark'] .breadcrumb strong {
+  color: #c0c5cf;
+}
+:root[data-theme='dark'] .global-search {
+  border: 1px solid #2a3953;
+  background: #0d192f;
+  color: #a6abb5;
+}
+:root[data-theme='dark'] .global-search kbd {
+  border: 1px solid #2a3953;
+}
+:root[data-theme='dark'] .team-tag {
+  color: #aeb3bd;
+  border-right: 1px solid #2a3953;
+}
+:root[data-theme='dark'] .notification-button {
+  color: #b3b8c2;
+}
+:root[data-theme='dark'] .page-title p {
+  color: #afb4be;
+}
+:root[data-theme='dark'] .section-heading > a,
+:root[data-theme='dark'] .section-heading > span {
+  color: #b0b5bf;
+}
+:root[data-theme='dark'] .section-heading > a {
+  color: #abb0d1;
+}
+:root[data-theme='dark'] .app-footer {
+  color: #a3a8b2;
+}
+:root[data-theme='dark'] .stat-card {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .stat-card:hover {
+  border-color: #2a3953;
+}
+:root[data-theme='dark'] .stat-card > div > span {
+  color: #b0b5bf;
+}
+:root[data-theme='dark'] .stat-card strong {
+  color: #d2d7e1;
+}
+:root[data-theme='dark'] .stat-card > svg {
+  color: #a4a9b3;
+}
+:root[data-theme='dark'] .quick-action {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .quick-action:hover {
+  border-color: #2a3953;
+}
+:root[data-theme='dark'] .quick-action small {
+  color: #abb0ba;
+}
+:root[data-theme='dark'] .quick-action > svg {
+  color: #aaafb9;
+}
+:root[data-theme='dark'] .composer > span:nth-child(2) {
+  color: #a8adb7;
+}
+:root[data-theme='dark'] .composer > svg {
+  color: #acb1bb;
+}
+:root[data-theme='dark'] .welcome-card {
+  background: linear-gradient(125deg, #0d192f 50%, #0d192f);
+}
+:root[data-theme='dark'] .welcome-card:after {
+  border: 1px solid #2a3953;
+}
+:root[data-theme='dark'] .welcome-symbol {
+  background: #0d192f;
+  color: #b7bce7;
+}
+:root[data-theme='dark'] .welcome-card > p {
+  color: #abb0ba;
+}
+:root[data-theme='dark'] .welcome-team {
+  border-top: 1px solid #2a3953;
+  color: #a6abb5;
+}
+:root[data-theme='dark'] .date-square {
+  border: 1px solid #2a3953;
+  background: #0d192f;
+}
+:root[data-theme='dark'] .date-square span {
+  color: #aeb3bd;
+}
+:root[data-theme='dark'] .meeting-mini small {
+  color: #b3b8c2;
+}
+:root[data-theme='dark'] .focus-task small {
+  color: #abb0ba;
+}
+:root[data-theme='dark'] .task-dot {
+  background: #0c162f;
+}
+:root[data-theme='dark'] .search-field {
+  background: #0d192f;
+  color: #acb1bb;
+}
+:root[data-theme='dark'] .segmented {
+  border: 1px solid #2a3953;
+  background: #0d192f;
+}
+:root[data-theme='dark'] .segmented button {
+  color: #afb4be;
+}
+:root[data-theme='dark'] .segmented button.active {
+  background: #0d192f;
+  color: #9fa4df;
+}
+:root[data-theme='dark'] .company-card:hover,
+:root[data-theme='dark'] .project-card:hover {
+  border-color: #2a3953;
+}
+:root[data-theme='dark'] .company-card-top > svg {
+  color: #a5aab4;
+}
+:root[data-theme='dark'] .company-card p {
+  color: #abb0ba;
+}
+:root[data-theme='dark'] .company-count {
+  color: #b0b5bf;
+}
+:root[data-theme='dark'] .company-card footer {
+  color: #aeb3bd;
+}
+:root[data-theme='dark'] .company-card footer strong {
+  color: #c0c5cf;
+}
+:root[data-theme='dark'] .company-card footer small {
+  color: #a5aab4;
+}
+:root[data-theme='dark'] .project-card > p {
+  color: #adb2bc;
+}
+:root[data-theme='dark'] .progress-track {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .progress-line > strong {
+  color: #aeb3bd;
+}
+:root[data-theme='dark'] .project-card footer > span {
+  color: #a8adb7;
+}
+:root[data-theme='dark'] .empty-icon {
+  background: #0d192f;
+  color: #a2a7b1;
+}
+:root[data-theme='dark'] .empty p {
+  color: #a9aeb8;
+}
+:root[data-theme='dark'] .back-link {
+  color: #afb4be;
+}
+:root[data-theme='dark'] .detail-heading p {
+  color: #aaafb9;
+}
+:root[data-theme='dark'] .detail-heading strong {
+  color: #b9bec8;
+}
+:root[data-theme='dark'] .tabs {
+  border-bottom: 1px solid #2a3953;
+}
+:root[data-theme='dark'] .tabs > button {
+  color: #acb1bb;
+}
+:root[data-theme='dark'] .info-grid > div > span:first-child {
+  color: #acb1bb;
+}
+:root[data-theme='dark'] .related-project {
+  color: #b9bec8;
+}
+:root[data-theme='dark'] .task-check {
+  border: 1.5px solid #2a3953;
+}
+:root[data-theme='dark'] .task-check.checked {
+  border-color: #2a3953;
+}
+:root[data-theme='dark'] .strike {
+  color: #a5aab4;
+}
+:root[data-theme='dark'] .overdue {
+  color: #d6aaae;
+}
+:root[data-theme='dark'] .gantt-head {
+  color: #acb1bb;
+}
+:root[data-theme='dark'] .gantt-label small {
+  color: #abb0ba;
+}
+:root[data-theme='dark'] .gantt-lane {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(8.333% - 1px),
+    #0d192f calc(8.333% - 1px),
+    #0d192f 8.333%
+  );
+}
+:root[data-theme='dark'] .gantt-bar {
+  background: #0c142d;
+  border-left: 3px solid #2a3953;
+  color: #b7bcc6;
+}
+:root[data-theme='dark'] .gantt-bar.done {
+  background: #0d192f;
+  border-color: #2a3953;
+  color: #bbc0ca;
+}
+:root[data-theme='dark'] .gantt-bar.blocked {
+  background: #131323;
+  border-color: #2a3953;
+  color: #b4b9c3;
+}
+:root[data-theme='dark'] .post-scope {
+  color: #afb4be;
+}
+:root[data-theme='dark'] .post-content {
+  color: #bec3cd;
+}
+:root[data-theme='dark'] .post-next {
+  background: #0d192f;
+  color: #a9aeb8;
+}
+:root[data-theme='dark'] .post-next strong {
+  color: #b8bdc7;
+}
+:root[data-theme='dark'] .post-next p {
+  color: #b0b5bf;
+}
+:root[data-theme='dark'] .post-actions .text-button {
+  color: #a7acb6;
+}
+:root[data-theme='dark'] .post-actions .text-button.selected {
+  color: #acb2dc;
+}
+:root[data-theme='dark'] .attachments > div {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .attachments .text-button,
+:root[data-theme='dark'] .attachments .external {
+  color: #aeb3bd;
+}
+:root[data-theme='dark'] .mentions > span {
+  color: #b2b3d8;
+  background: #0d192f;
+}
+:root[data-theme='dark'] .person-row small {
+  color: #a6abb5;
+}
+:root[data-theme='dark'] .comment p {
+  color: #afb4be;
+}
+:root[data-theme='dark'] .week-head > span {
+  color: #a6abb5;
+}
+:root[data-theme='dark'] .week-head > button {
+  color: #b1b6c0;
+}
+:root[data-theme='dark'] .hours > span {
+  color: #a1a6b0;
+}
+:root[data-theme='dark'] .hour-slot {
+  border-bottom: 1px solid #2a3953;
+}
+:root[data-theme='dark'] .calendar-event {
+  background: #0d192f;
+  border-left: 3px solid #2a3953;
+  color: #b4b9c3;
+}
+:root[data-theme='dark'] .calendar-event.completed {
+  background: #0d192f;
+  border-color: #2a3953;
+}
+:root[data-theme='dark'] .calendar-event.cancelled,
+:root[data-theme='dark'] .calendar-event.missed {
+  background: #0d192f;
+  border-color: #2a3953;
+}
+:root[data-theme='dark'] .calendar-hint {
+  color: #a3a8b2;
+}
+:root[data-theme='dark'] .month-label {
+  color: #a7acb6;
+}
+:root[data-theme='dark'] .month-day.selected {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .month-event {
+  background: #0d192f;
+  color: #aeb3bd;
+}
+:root[data-theme='dark'] .month-day > small {
+  color: #a6abb5;
+}
+:root[data-theme='dark'] .meeting-card:hover {
+  border-color: #2a3953;
+}
+:root[data-theme='dark'] .meeting-date {
+  background: #0d192f;
+  color: #b4b9c3;
+}
+:root[data-theme='dark'] .meeting-card .grow > span {
+  color: #abb0ba;
+}
+:root[data-theme='dark'] .meeting-section summary {
+  color: #b6bbc5;
+}
+:root[data-theme='dark'] .meeting-section p {
+  color: #adb2bc;
+}
+:root[data-theme='dark'] .finance-summary > .card > span {
+  color: #adb2bc;
+}
+:root[data-theme='dark'] .finance-summary small {
+  color: #a5aab4;
+}
+:root[data-theme='dark'] .finance-row-icon {
+  background: #0d192f;
+  color: #a5aab4;
+}
+:root[data-theme='dark'] .finance-row .grow > small {
+  color: #a5aab4;
+}
+:root[data-theme='dark'] .amount > small {
+  color: #a4a9b3;
+}
+:root[data-theme='dark'] .modal {
+  border: 1px solid #2a3953;
+  color: #d1d6e0;
+}
+:root[data-theme='dark'] .modal-head {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .wizard-progress {
+  color: #a9aeb8;
+}
+:root[data-theme='dark'] .wizard-progress > span:first-child {
+  color: #b2b7dc;
+}
+:root[data-theme='dark'] .step-track > span {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .step-track > span.active {
+  background: #0c1741;
+}
+:root[data-theme='dark'] .field > label {
+  color: #b7bcc6;
+}
+:root[data-theme='dark'] .required {
+  color: #a3a8b2;
+}
+:root[data-theme='dark'] .field-hint {
+  color: #a5aab4;
+}
+:root[data-theme='dark'] .dictation .text-button {
+  color: #a8adb7;
+}
+:root[data-theme='dark'] .dictation .recording {
+  color: #dcafb6;
+}
+:root[data-theme='dark'] .wizard-footer {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .upload {
+  border: 1.5px dashed #2a3953;
+  background: #0d192f;
+  color: #a5aab4;
+}
+:root[data-theme='dark'] .choice {
+  border: 1px solid #2a3953;
+  color: #afb4be;
+}
+:root[data-theme='dark'] .choice.selected {
+  background: #0d192f;
+  border-color: #2a3953;
+  color: #afb4d8;
+}
+:root[data-theme='dark'] .checkbox-label {
+  color: #a7acb6;
+}
+:root[data-theme='dark'] .error-box,
+:root[data-theme='dark'] .warning-box,
+:root[data-theme='dark'] .draft-note {
+  background: #0d192f;
+  border: 1px solid #2a3953;
+  color: #b3b8c2;
+}
+:root[data-theme='dark'] .warning-box {
+  background: #131823;
+  border-color: #2a3953;
+  color: #c9bca1;
+}
+:root[data-theme='dark'] .draft-note {
+  background: #0d192f;
+  border-color: #2a3953;
+  color: #abb0ba;
+}
+:root[data-theme='dark'] .review-heading {
+  color: #afb4be;
+}
+:root[data-theme='dark'] .review dt {
+  color: #a7acb6;
+}
+:root[data-theme='dark'] .review dd {
+  color: #b5bac4;
+}
+:root[data-theme='dark'] .offline-banner,
+:root[data-theme='dark'] .error-banner {
+  background: #161923;
+  color: #c5b99f;
+}
+:root[data-theme='dark'] .error-banner {
+  background: #0d192f;
+  color: #b0b5bf;
+}
+:root[data-theme='dark'] .error-banner button {
+  color: #b4b9c3;
+}
+:root[data-theme='dark'] .quick-menu {
+  background: #0d192f;
+  border: 1px solid #2a3953;
+}
+:root[data-theme='dark'] .quick-menu h3 {
+  color: #a5aab4;
+}
+:root[data-theme='dark'] .quick-menu > button {
+  color: #b4b9c3;
+}
+:root[data-theme='dark'] .quick-menu > button:hover {
+  background: #0d192f;
+  color: #afb4dd;
+}
+:root[data-theme='dark'] .notice {
+  color: #aaafb9;
+}
+:root[data-theme='dark'] .notice.unread {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .notice strong {
+  color: #b9bec8;
+}
+:root[data-theme='dark'] .login-story-copy .eyebrow {
+  color: #afb4be;
+}
+:root[data-theme='dark'] .login-story h1 em {
+  color: #babbf1;
+}
+:root[data-theme='dark'] .login-story-copy p {
+  color: #b0b5bf;
+}
+:root[data-theme='dark'] .login-pill {
+  color: #a1a6b0;
+}
+:root[data-theme='dark'] .login-story footer {
+  color: #bfc4ce;
+}
+:root[data-theme='dark'] .login-form > p {
+  color: #a9aeb8;
+}
+:root[data-theme='dark'] .login-form .field > label {
+  color: #b7bcc6;
+}
+:root[data-theme='dark'] .password-input button {
+  color: #a4a9b3;
+}
+:root[data-theme='dark'] .login-form > .login-help {
+  color: #a3a8b2;
+}
+:root[data-theme='dark'] .login-footer {
+  color: #9ea3ad;
+}
+:root[data-theme='dark'] .auth-page {
+  background: #0d192f;
+}
+:root[data-theme='dark'] .team-card > p {
+  color: #acb1bb;
+}
+@media (max-width: 760px) {
+  :root[data-theme='dark'] .topbar {
+    background: #0d192fed;
+  }
+}
+@media (max-width: 760px) {
+  :root[data-theme='dark'] .breadcrumb > span:first-child {
+    color: #d0d5df;
+  }
+}
+@media (max-width: 760px) {
+  :root[data-theme='dark'] .bottom-nav {
+    background: #0d192ff5;
+    border-top: 1px solid #2a3953;
+  }
+}
+@media (max-width: 760px) {
+  :root[data-theme='dark'] .bottom-nav > a,
+  :root[data-theme='dark'] .bottom-nav > button {
+    color: #a5aab4;
+  }
+}
+@media (max-width: 760px) {
+  :root[data-theme='dark'] .bottom-nav .active {
+    color: #a3a9e6;
+  }
+}
+@media (max-width: 760px) {
+  :root[data-theme='dark'] .mobile-week > button {
+    color: #a9aeb8;
+  }
+}
+@media (max-width: 760px) {
+  :root[data-theme='dark'] .login-page {
+    background: #0d192f;
+  }
+}

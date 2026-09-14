@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './styles.css'
+import './dark.css'
+import './brand.css'
 import '@fontsource-variable/dm-sans'
 import '@fontsource-variable/manrope'
 class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { error: boolean }> {
