@@ -310,7 +310,8 @@ export function MeetingDetail({
                     initial: {
                       company_id: m.company_id || '',
                       project_id: m.project_id || '',
-                      title: outcome || '',
+                      title: '',
+                      description: outcome || '',
                     },
                   })
                 } catch (error) {

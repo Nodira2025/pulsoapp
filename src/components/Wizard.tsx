@@ -15,6 +15,7 @@ export interface Field {
   hint?: string
   placeholder?: string
   min?: string | number
+  maxLength?: number
   max?: string | number
   step?: number
   accept?: string
@@ -31,6 +32,7 @@ export function Wizard({
   steps,
   initial,
   contextValues,
+  normalizeInitial,
   draftId,
   onClose,
   onSave,
@@ -41,6 +43,7 @@ export function Wizard({
   steps: Step[]
   initial: Values
   contextValues?: Values
+  normalizeInitial?: (values: Values) => Values
   draftId: string
   onClose: () => void
   onSave: (v: Values) => Promise<void>
@@ -51,9 +54,15 @@ export function Wizard({
   const key = `pulso-draft-${user?.id}-${draftId}`
   const [values, setValues] = useState<Values>(() => {
       try {
-        return { ...initial, ...JSON.parse(localStorage.getItem(key) || '{}'), ...contextValues }
+        const restored = {
+          ...initial,
+          ...JSON.parse(localStorage.getItem(key) || '{}'),
+          ...contextValues,
+        }
+        return normalizeInitial ? normalizeInitial(restored) : restored
       } catch {
-        return { ...initial, ...contextValues }
+        const restored = { ...initial, ...contextValues }
+        return normalizeInitial ? normalizeInitial(restored) : restored
       }
     }),
     [step, setStep] = useState(0),
@@ -287,6 +296,7 @@ export function Wizard({
                       value={values[f.key] ?? ''}
                       min={f.min}
                       max={f.max}
+                      maxLength={f.maxLength}
                       step={f.type === 'number' ? f.step || '0.01' : undefined}
                       required={f.required}
                       autoComplete={f.type === 'password' ? 'new-password' : 'off'}

@@ -21,7 +21,17 @@ import {
 import { differenceInCalendarDays, addDays, parseISO, format } from 'date-fns'
 import { useStore } from '../lib/store'
 import { dateLabel, normalize, progress, today, messageOf, money, whatsapp } from '../lib/utils'
-import { Avatar, PageTitle, Empty, Progress, Badge, External, Attachments } from '../components/UI'
+import {
+  Avatar,
+  PageTitle,
+  Empty,
+  Progress,
+  Badge,
+  External,
+  Attachments,
+  Modal,
+  Dictation,
+} from '../components/UI'
 import { PostCard, type OpenForm } from './Feed'
 import { Finances } from './Finances'
 import { MeetingList } from './Agenda'
@@ -222,8 +232,78 @@ export function Projects({ open }: { open: OpenForm }) {
 }
 export function TaskList({ tasks }: { tasks: Task[] }) {
   const { data, update, toast } = useStore()
+  const [selected, setSelected] = useState<Task | null>(null)
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
   return (
     <div className="task-list">
+      {selected && (
+        <Modal
+          title="Detalle de la tarea"
+          onClose={() => {
+            if (!busy) setSelected(null)
+          }}
+        >
+          <form
+            className="task-detail-form"
+            onSubmit={async (e) => {
+              e.preventDefault()
+              if (!title.trim() || title.trim().length > 80) {
+                setError('Escribí un título de entre 1 y 80 caracteres.')
+                return
+              }
+              setBusy(true)
+              setError('')
+              try {
+                await update('tasks', selected.id, {
+                  title: title.trim(),
+                  description: description.trim(),
+                })
+                toast('Tarea actualizada')
+                setSelected(null)
+              } catch (err) {
+                setError(messageOf(err))
+              } finally {
+                setBusy(false)
+              }
+            }}
+          >
+            <label htmlFor="task-detail-title">Título de la tarea</label>
+            <input
+              id="task-detail-title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              maxLength={80}
+              required
+              disabled={busy}
+            />
+            <small className="field-hint">{title.length}/80 caracteres</small>
+            <label htmlFor="task-detail-description">Descripción de la tarea</label>
+            <textarea
+              id="task-detail-description"
+              rows={8}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              disabled={busy}
+              placeholder="Detalles y pasos a seguir"
+            />
+            {!busy && (
+              <Dictation onText={(text) => setDescription((old) => `${old} ${text}`.trim())} />
+            )}
+            {error && (
+              <p className="error-box" role="alert">
+                {error}
+              </p>
+            )}
+            <button className="button primary" type="submit" disabled={busy}>
+              {busy ? 'Guardando…' : 'Guardar cambios'}
+            </button>
+          </form>
+        </Modal>
+      )}
+
       {tasks.map((t) => {
         const p = data.profiles.find((p) => p.id === t.assignee_id)
         return (
@@ -242,7 +322,17 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
               {t.status === 'done' ? '✓' : ''}
             </button>
             <div className="grow">
-              <strong className={t.status === 'done' ? 'strike' : ''}>{t.title}</strong>
+              <button
+                className={`task-title-button ${t.status === 'done' ? 'strike' : ''}`}
+                onClick={() => {
+                  setSelected(t)
+                  setTitle(t.title)
+                  setDescription(t.description || '')
+                  setError('')
+                }}
+              >
+                {t.title}
+              </button>
               <div className="meta">
                 <Link to={`/proyectos/${t.project_id}`}>
                   {data.projects.find((p) => p.id === t.project_id)?.name}

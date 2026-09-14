@@ -116,7 +116,11 @@ export function PostCard({ post, open }: { post: Post; open: OpenForm }) {
           onClick={() =>
             open({
               kind: 'task',
-              initial: { project_id: post.project_id || '', title: post.next_step || post.content },
+              initial: {
+                project_id: post.project_id || '',
+                title: '',
+                description: post.next_step || post.content,
+              },
             })
           }
         >

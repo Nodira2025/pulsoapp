@@ -46,6 +46,7 @@ export interface Task {
   id: ID
   project_id: ID
   title: string
+  description: string
   assignee_id: ID
   start_date: string
   due_date: string

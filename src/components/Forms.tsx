@@ -6,6 +6,7 @@ import { useStore } from '../lib/store'
 import { supabase, upload } from '../lib/supabase'
 import { balance, conflicts, normalize, today } from '../lib/utils'
 import { labels } from '../lib/types'
+import { taskText } from '../lib/tasks'
 export type FormKind =
   | 'company'
   | 'project'
@@ -225,6 +226,7 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
     initial = {
       project_id: '',
       title: '',
+      description: '',
       assignee_id: user.id,
       start_date: today(),
       due_date: tomorrow,
@@ -236,7 +238,14 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
         title: 'Un próximo paso claro',
         fields: [
           { ...project, required: true },
-          f('title', '¿Qué hay que hacer?', 'textarea', true),
+          f('title', 'Título de la tarea', 'text', true, {
+            maxLength: 80,
+            placeholder: 'Ej.: Diseñar la portada de Instagram',
+            hint: 'Un nombre breve, de hasta 80 caracteres.',
+          }),
+          f('description', 'Descripción de la tarea', 'textarea', false, {
+            placeholder: 'Explicá lo que hay que hacer, los detalles y los pasos a seguir.',
+          }),
           person('assignee_id', 'Responsable'),
         ],
       },
@@ -552,7 +561,8 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
     } else if (kind === 'task') {
       await insert('tasks', {
         project_id: v.project_id,
-        title: v.title,
+        title: v.title.trim(),
+        description: (v.description || '').trim(),
         assignee_id: v.assignee_id,
         start_date: v.start_date,
         due_date: v.due_date,
@@ -643,6 +653,12 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
   function validate(v: Values, step: number) {
     const final = step === steps.length
     if (
+      kind === 'task' &&
+      (step === 0 || final) &&
+      (!v.title?.trim() || v.title.trim().length > 80)
+    )
+      return 'Escribí un título de entre 1 y 80 caracteres.'
+    if (
       (kind === 'project' || kind === 'task') &&
       (step === 1 || final) &&
       (v.end_date || v.due_date) < v.start_date
@@ -707,6 +723,7 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
       title={title}
       steps={steps}
       initial={initial}
+      normalizeInitial={kind === 'task' ? taskText : undefined}
       contextValues={
         kind === 'meeting' && !request.id
           ? Object.fromEntries(
