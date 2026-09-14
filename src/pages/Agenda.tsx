@@ -275,20 +275,29 @@ export function MeetingDetail({
             <button
               type="button"
               className="button secondary"
-              onClick={() => {
-                onClose()
-                open({
-                  kind: 'task',
-                  initial: {
-                    company_id: m.company_id || '',
-                    project_id: m.project_id || '',
-                    title: outcome || '',
-                  },
-                })
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true)
+                try {
+                  await update('meetings', m.id, { outcome, status })
+                  onClose()
+                  open({
+                    kind: 'task',
+                    initial: {
+                      company_id: m.company_id || '',
+                      project_id: m.project_id || '',
+                      title: outcome || '',
+                    },
+                  })
+                } catch (error) {
+                  toast(messageOf(error))
+                } finally {
+                  setBusy(false)
+                }
               }}
             >
               <Plus size={17} />
-              Crear tarea
+              Guardar y crear tarea
             </button>
           </div>
         </form>

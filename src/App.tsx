@@ -220,7 +220,14 @@ function Shell() {
   }
   return (
     <div className="app-shell">
-      <a className="skip-link" href="#main-content">
+      <a
+        className="skip-link"
+        href="#main-content"
+        onClick={(event) => {
+          event.preventDefault()
+          document.getElementById('main-content')?.focus()
+        }}
+      >
         Ir al contenido
       </a>
       {menu && (
@@ -341,7 +348,7 @@ function Shell() {
             <button onClick={() => void refresh()}>Reintentar</button>
           </div>
         )}
-        <main id="main-content" className="page">
+        <main id="main-content" className="page" tabIndex={-1}>
           <Routes>
             <Route path="/" element={<Dashboard open={open} />} />
             <Route path="/novedades" element={<Feed open={open} />} />
