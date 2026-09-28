@@ -1,0 +1,172 @@
+/* Scale the workspace, keeping navigation and form controls within easy reach. */
+.page {
+  zoom: var(--content-zoom, 1);
+}
+.display-scale {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 7px;
+  min-height: 38px;
+  color: inherit;
+  background: transparent;
+}
+.display-scale select {
+  width: 65px;
+  min-height: 36px;
+  padding: 5px 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+@media (max-width: 700px) {
+  .welcome-shell .page {
+    padding: 8px 10px 16px;
+  }
+  .welcome-home {
+    padding: 16px 14px 12px;
+    border-radius: 20px;
+  }
+  .welcome-brand {
+    margin-bottom: 14px;
+  }
+  .welcome-brand img {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+  .welcome-brand strong {
+    font-size: 40px;
+    letter-spacing: -2px;
+  }
+  .welcome-brand p {
+    margin-top: 6px;
+    font-size: 6px;
+    letter-spacing: 1.3px;
+  }
+  .welcome-strip {
+    padding: 10px 0;
+    border-radius: 14px;
+  }
+  .welcome-strip > * {
+    padding: 0 5px;
+    gap: 4px;
+  }
+  .welcome-strip svg {
+    width: 16px;
+    height: 16px;
+  }
+  .welcome-strip strong {
+    font-size: 17px;
+  }
+  .welcome-strip span {
+    font-size: 9px;
+    line-height: 1.35;
+  }
+  .welcome-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 100px;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .welcome-accent {
+    margin-bottom: 10px;
+    width: 30px;
+    height: 3px;
+  }
+  .welcome-greeting h1 {
+    font-size: clamp(24px, 7vw, 32px);
+    line-height: 1.12;
+    letter-spacing: -0.8px;
+    margin-bottom: 10px;
+    overflow-wrap: anywhere;
+  }
+  .welcome-greeting p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .welcome-greeting .desktop-break {
+    display: none;
+  }
+  .welcome-avatar {
+    padding: 3px;
+  }
+  .welcome-avatar .avatar {
+    width: 84px !important;
+    height: 84px !important;
+    min-width: 84px !important;
+    font-size: 28px;
+    border-width: 2px;
+  }
+  .welcome-profile > span {
+    padding: 8px 10px;
+    gap: 5px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .welcome-profile > span svg {
+    width: 16px;
+    height: 16px;
+  }
+  .welcome-start {
+    margin-bottom: 16px;
+  }
+  .welcome-start button {
+    padding: 13px 48px;
+    font-size: 23px;
+    border-radius: 17px;
+    min-height: 52px;
+  }
+  .welcome-start p {
+    margin-top: 8px;
+    font-size: 10px;
+  }
+  .welcome-footer {
+    padding: 9px;
+    gap: 8px;
+    font-size: 9px;
+    border-radius: 13px;
+  }
+  .welcome-footer img {
+    width: 27px;
+  }
+  .welcome-footer small {
+    font-size: 6px;
+  }
+  .welcome-shell .app-footer {
+    display: none;
+  }
+  .welcome-shell .floating-actions:not(:has(.quick-menu)) {
+    display: none;
+  }
+}
+@media (max-width: 450px) {
+  .topbar {
+    padding-left: 12px;
+    padding-right: 12px;
+    gap: 8px;
+  }
+  .topbar .breadcrumb {
+    display: none;
+  }
+  .topbar-actions {
+    gap: 8px;
+  }
+  .topbar .theme-control {
+    padding: 0 7px;
+  }
+  .topbar .theme-control select {
+    max-width: 100px;
+    font-size: 12px;
+  }
+  .display-scale {
+    padding: 0 5px;
+  }
+  .display-scale select {
+    width: 59px;
+  }
+}

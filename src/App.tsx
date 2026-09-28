@@ -1,3 +1,4 @@
+import { DisplayScale } from './components/DisplayScale'
 import { useEffect, useState, type FormEvent } from 'react'
 import {
   HashRouter,
@@ -342,6 +343,7 @@ function Shell() {
           </form>
           <div className="topbar-actions">
             <ThemeControl />
+            <DisplayScale />
             <span className="team-tag">Equipo PULSO</span>
             <button
               className="icon-button notification-button"
