@@ -10,3 +10,5 @@ dist/
 WhatsApp Image*
 supabase/.temp/
 supabase/.branches/
+
+.codex-remote-attachments/

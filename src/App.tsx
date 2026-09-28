@@ -35,7 +35,7 @@ import {
 import { StoreProvider, useStore } from './lib/store'
 import { supabase } from './lib/supabase'
 import { messageOf, dateLabel } from './lib/utils'
-import { Avatar, Modal, Spinner, Empty } from './components/UI'
+import { Avatar, Spinner, Empty } from './components/UI'
 import { Forms, type FormRequest } from './components/Forms'
 import { Dashboard } from './pages/Dashboard'
 import { Feed } from './pages/Feed'
@@ -46,7 +46,7 @@ import { FirstPassword, Profile } from './pages/Profile'
 import { AppUpdate } from './components/AppUpdate'
 import { ThemeControl, ThemeProvider } from './lib/theme'
 import { DeviceProvider } from './components/DeviceSetup'
-import { AttentionBrief } from './components/AttentionBrief'
+import { Welcome } from './pages/Welcome'
 
 const nav = [
   { to: '/', name: 'Inicio', icon: LayoutDashboard },
@@ -179,7 +179,6 @@ function Shell() {
   const [form, setForm] = useState<FormRequest | null>(null),
     [menu, setMenu] = useState(false),
     [quick, setQuick] = useState(false),
-    [notices, setNotices] = useState(false),
     [offline, setOffline] = useState(!navigator.onLine),
     [search, setSearch] = useState('')
   const navigate = useNavigate(),
@@ -200,6 +199,19 @@ function Shell() {
     setQuick(false)
     window.scrollTo(0, 0)
   }, [location.pathname])
+  useEffect(() => {
+    if (!quick) return
+    const firstAction = document.querySelector<HTMLElement>('.quick-menu a, .quick-menu button')
+    firstAction?.focus()
+    const close = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setQuick(false)
+        document.querySelector<HTMLButtonElement>('.fab')?.focus()
+      }
+    }
+    window.addEventListener('keydown', close)
+    return () => window.removeEventListener('keydown', close)
+  }, [quick])
   if (loading) return <Spinner />
   if (!session) return <Login />
   if (!user)
@@ -225,7 +237,7 @@ function Shell() {
     setForm(r)
   }
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${location.pathname === '/' ? 'welcome-shell' : ''}`}>
       <a
         className="skip-link"
         href="#main-content"
@@ -332,7 +344,7 @@ function Shell() {
             <button
               className="icon-button notification-button"
               aria-label={`Notificaciones${unread ? `, ${unread} sin leer` : ''}`}
-              onClick={() => setNotices(true)}
+              onClick={() => navigate('/notificaciones')}
             >
               <Bell size={20} />
               {unread > 0 && <span>{unread > 9 ? '9+' : unread}</span>}
@@ -357,7 +369,69 @@ function Shell() {
         )}
         <main id="main-content" className="page" tabIndex={-1}>
           <Routes>
-            <Route path="/" element={<Dashboard open={open} />} />
+            <Route
+              path="/notificaciones"
+              element={
+                <section className="card">
+                  <div className="padded">
+                    <h1>Notificaciones</h1>
+                    <Link to="/pendientes">Ver pendientes</Link> · <Link to="/agenda">Agenda</Link>{' '}
+                    · <Link to="/cobros">Cobros</Link>
+                  </div>{' '}
+                  <div className="padded">
+                    {unread > 0 && (
+                      <button
+                        className="text-button"
+                        onClick={async () => {
+                          const { error } = await supabase
+                            .from('notifications')
+                            .update({ read_at: new Date().toISOString() })
+                            .eq('recipient_id', user.id)
+                            .is('read_at', null)
+                          if (error) toast(messageOf(error))
+                          else await refresh()
+                        }}
+                      >
+                        <CheckCheck size={17} />
+                        Marcar todas como leídas
+                      </button>
+                    )}
+                    {data.notifications.length ? (
+                      data.notifications.slice(0, 100).map((n) => (
+                        <button
+                          className={`notice ${!n.read_at ? 'unread' : ''}`}
+                          key={n.id}
+                          onClick={async () => {
+                            const { error } = await supabase
+                              .from('notifications')
+                              .update({ read_at: new Date().toISOString() })
+                              .eq('id', n.id)
+                            if (error) toast(messageOf(error))
+                            else await refresh()
+                            navigate(n.href.startsWith('/') ? n.href : '/')
+                          }}
+                        >
+                          <Bell size={18} />
+                          <div>
+                            <strong>{n.title}</strong>
+                            <p>{n.body}</p>
+                            <small>{dateLabel(n.created_at, 'd MMM HH:mm')}</small>
+                          </div>
+                        </button>
+                      ))
+                    ) : (
+                      <Empty
+                        icon={Bell}
+                        title="Estás al día"
+                        description="Las menciones, asignaciones y recordatorios aparecerán acá."
+                      />
+                    )}
+                  </div>
+                </section>
+              }
+            />
+            <Route path="/" element={<Welcome onStart={() => setQuick(true)} />} />
+            <Route path="/resumen" element={<Dashboard open={open} />} />
             <Route path="/novedades" element={<Feed open={open} />} />
             <Route path="/empresas" element={<Companies open={open} />} />
             <Route path="/empresas/:id" element={<Detail type="company" open={open} />} />
@@ -402,11 +476,16 @@ function Shell() {
       </nav>
       <div className="floating-actions">
         {quick && (
-          <div className="quick-menu">
-            <h3>¿Qué querés sumar?</h3>
+          <nav className="quick-menu" aria-label="Menú de acciones">
+            <h3>Menú principal</h3>
+            <Link to="/resumen">Resumen del equipo</Link>
+            <Link to="/empresas">Buscar empresa</Link>
+            <Link to="/proyectos">Mis proyectos</Link>
+            <Link to="/agenda">Agenda</Link>
+            <Link to="/pendientes">Pendientes</Link>
             {[
               { kind: 'post', label: 'Una nota al equipo', icon: MessageSquare },
-              { kind: 'company', label: 'Añadir marca', icon: Building2 },
+              { kind: 'company', label: 'Añadir empresa', icon: Building2 },
               { kind: 'project', label: 'Nuevo proyecto', icon: FolderKanban },
               { kind: 'update', label: 'Actualizar proyecto', icon: Activity },
               { kind: 'meeting', label: 'Agendar reunión', icon: CalendarDays },
@@ -419,7 +498,7 @@ function Shell() {
                 {a.label}
               </button>
             ))}
-          </div>
+          </nav>
         )}
         <button
           className={`fab ${quick ? 'expanded' : ''}`}
@@ -437,71 +516,6 @@ function Shell() {
           onClose={() => setForm(null)}
         />
       )}
-      {notices && (
-        <Modal title="Tus notificaciones" onClose={() => setNotices(false)}>
-          <div className="padded">
-            <button
-              className="button secondary full"
-              onClick={() => {
-                setNotices(false)
-                window.dispatchEvent(new Event('pulso:show-attention'))
-              }}
-            >
-              Ver tareas, reuniones y cobros próximos
-            </button>
-          </div>
-          <div className="padded">
-            {unread > 0 && (
-              <button
-                className="text-button"
-                onClick={async () => {
-                  const { error } = await supabase
-                    .from('notifications')
-                    .update({ read_at: new Date().toISOString() })
-                    .eq('recipient_id', user.id)
-                    .is('read_at', null)
-                  if (error) toast(messageOf(error))
-                  else await refresh()
-                }}
-              >
-                <CheckCheck size={17} />
-                Marcar todas como leídas
-              </button>
-            )}
-            {data.notifications.length ? (
-              data.notifications.slice(0, 100).map((n) => (
-                <button
-                  className={`notice ${!n.read_at ? 'unread' : ''}`}
-                  key={n.id}
-                  onClick={async () => {
-                    const { error } = await supabase
-                      .from('notifications')
-                      .update({ read_at: new Date().toISOString() })
-                      .eq('id', n.id)
-                    if (error) toast(messageOf(error))
-                    else await refresh()
-                    setNotices(false)
-                    navigate(n.href.startsWith('/') ? n.href : '/')
-                  }}
-                >
-                  <Bell size={18} />
-                  <div>
-                    <strong>{n.title}</strong>
-                    <p>{n.body}</p>
-                    <small>{dateLabel(n.created_at, 'd MMM HH:mm')}</small>
-                  </div>
-                </button>
-              ))
-            ) : (
-              <Empty
-                icon={Bell}
-                title="Estás al día"
-                description="Las menciones, asignaciones y recordatorios aparecerán acá."
-              />
-            )}
-          </div>
-        </Modal>
-      )}
     </div>
   )
 }
@@ -512,7 +526,6 @@ export default function App() {
         <DeviceProvider>
           <HashRouter>
             <Shell />
-            <AttentionBrief />
             <AppUpdate />
           </HashRouter>
         </DeviceProvider>

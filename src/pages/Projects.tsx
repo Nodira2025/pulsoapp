@@ -80,11 +80,11 @@ export function Companies({ open }: { open: OpenForm }) {
       <PageTitle
         eyebrow="NUESTRAS CONEXIONES"
         title="Empresas"
-        description="Cada marca tiene su historia. Acá la construimos juntos."
+        description="Cada empresa tiene su historia. Acá la construimos juntos."
         action={
           <button className="button primary" onClick={() => open({ kind: 'company' })}>
             <Plus size={18} />
-            Añadir marca
+            Añadir empresa
           </button>
         }
       />
@@ -129,7 +129,7 @@ export function Companies({ open }: { open: OpenForm }) {
           <Empty
             icon={Building2}
             title={
-              search ? 'No encontramos esa empresa' : 'La próxima gran idea empieza con una marca'
+              search ? 'No encontramos esa empresa' : 'La próxima gran idea empieza con una empresa'
             }
             description={
               search
@@ -140,7 +140,7 @@ export function Companies({ open }: { open: OpenForm }) {
               !search && (
                 <button className="button primary" onClick={() => open({ kind: 'company' })}>
                   <Plus size={17} />
-                  Añadir marca
+                  Añadir empresa
                 </button>
               )
             }

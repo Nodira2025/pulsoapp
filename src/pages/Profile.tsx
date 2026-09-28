@@ -1,3 +1,4 @@
+import { compressImage } from '../lib/images'
 import { useState, type FormEvent } from 'react'
 import { Plus, Camera, LogOut, ShieldCheck, UserRound, LockKeyhole } from 'lucide-react'
 import { useStore } from '../lib/store'
@@ -148,9 +149,10 @@ export function Profile({ open }: { open: OpenForm }) {
                 onChange={async (e) => {
                   const file = e.target.files?.[0]
                   if (!file) return
+                  e.target.value = ''
                   setBusy(true)
                   try {
-                    const path = await upload(file, user!.id)
+                    const path = await upload(await compressImage(file, 768), user!.id)
                     await update('profiles', user!.id, { avatar_path: path })
                     toast('Foto actualizada.')
                   } catch (e) {
@@ -162,6 +164,9 @@ export function Profile({ open }: { open: OpenForm }) {
               />
             </label>
           </div>
+          <p className="field-hint">
+            Tu foto se comprime automáticamente antes de subirla. JPG, PNG o WebP, hasta 20 MB.
+          </p>
           <form onSubmit={save}>
             <div className="field">
               <label htmlFor="profile-name">Nombre</label>

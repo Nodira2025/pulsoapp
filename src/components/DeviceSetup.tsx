@@ -118,20 +118,6 @@ export function DeviceProvider({ children }: { children: ReactNode }) {
       window.removeEventListener('focus', refresh)
     }
   }, [user?.id])
-  useEffect(() => {
-    if (!user || user.must_change_password || !ready || installed) return
-    let dismissed = 0
-    try {
-      dismissed = Number(localStorage.getItem(`pulso-device-dismissed:${user.id}`))
-    } catch {
-      /* Optional preference. */
-    }
-    if (Date.now() - dismissed < 7 * 86400000) return
-    const timer = setTimeout(() => {
-      if (!document.querySelector('dialog[open]')) setVisible(true)
-    }, 1500)
-    return () => clearTimeout(timer)
-  }, [user?.id, user?.must_change_password, ready, installed, pushOn])
   function dismiss() {
     setVisible(false)
     setHandled(true)

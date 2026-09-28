@@ -30,7 +30,7 @@ export function Dashboard({ open }: { open: OpenForm }) {
   const actions = [
     {
       kind: 'company',
-      label: 'Añadir marca',
+      label: 'Añadir empresa',
       detail: 'Un nuevo vínculo',
       icon: Building2,
       color: 'blue',
@@ -159,11 +159,12 @@ export function Dashboard({ open }: { open: OpenForm }) {
                 se construyen en equipo.
               </h2>
               <p>
-                Empezá sumando una marca o compartiendo una nota. Cada avance queda acá, para todos.
+                Empezá sumando una empresa o compartiendo una nota. Cada avance queda acá, para
+                todos.
               </p>
               <button className="button primary" onClick={() => open({ kind: 'company' })}>
                 <Plus size={17} />
-                Añadir la primera marca
+                Añadir la primera empresa
               </button>
               <div className="welcome-team">
                 <div className="avatar-stack">

@@ -1,3 +1,4 @@
+import { compressImage } from '../lib/images'
 import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { addDays, addWeeks, addMonths, format } from 'date-fns'
@@ -81,7 +82,7 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
   const kind = request.kind
   const tomorrow = format(addDays(new Date(), 1), 'yyyy-MM-dd')
   if (kind === 'company') {
-    title = request.id ? 'Editar empresa' : 'Añadir marca'
+    title = request.id ? 'Editar empresa' : 'Añadir empresa'
     initial = {
       name: '',
       industry: '',
@@ -94,7 +95,7 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
     }
     steps = [
       {
-        title: 'Conozcamos la marca',
+        title: 'Conozcamos la empresa',
         fields: [
           f('name', 'Nombre de la empresa', 'text', true),
           f('industry', 'Rubro'),
@@ -513,7 +514,9 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
         maps_url: v.maps_url || '',
         networks: v.networks || '',
         notes: v.notes || '',
-        ...(v.logo?.[0] ? { logo_path: await upload(v.logo[0], user!.id) } : {}),
+        ...(v.logo?.[0]
+          ? { logo_path: await upload(await compressImage(v.logo[0], 1200), user!.id) }
+          : {}),
       }
       const id =
         request.id ||
