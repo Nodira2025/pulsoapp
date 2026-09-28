@@ -59,6 +59,7 @@ const nav = [
   { to: '/gastos', name: 'Gastos', icon: Receipt },
 ]
 function Login() {
+  const navigate = useNavigate()
   const [username, setUsername] = useState(''),
     [password, setPassword] = useState(''),
     [error, setError] = useState(''),
@@ -74,6 +75,7 @@ function Login() {
         password,
       })
       if (error) throw error
+      navigate('/', { replace: true })
     } catch (e) {
       setError(messageOf(e))
     } finally {
