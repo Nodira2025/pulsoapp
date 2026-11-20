@@ -1,9 +1,11 @@
 import { defineConfig, loadEnv } from 'vite'
+import { validateSupabaseEnvironment } from './src/lib/environment'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd(), '')
+  if (command === 'build') validateSupabaseEnvironment(env)
   return {
     base: env.VITE_BASE_PATH || '/',
     plugins: [

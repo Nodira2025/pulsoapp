@@ -24,6 +24,9 @@ jobs:
       - run: npm run build
         env:
           VITE_BASE_PATH: /pulsoapp/
+          # Públicos por diseño (ver README). Se declaran acá porque el código ya no tiene valores por defecto.
+          VITE_SUPABASE_URL: https://ckcbxnhwpnvhpskculga.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_cCX6krVyAF6Q-4JVCr1GVg_LxPkkl4o
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

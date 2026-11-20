@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { attentionItems, layoutMeetings, meetingWhatsapp } from './agenda'
+import { attentionItems, initialScrollHour, layoutMeetings, meetingWhatsapp } from './agenda'
 import {
   emptyData,
   type Data,
@@ -92,5 +92,22 @@ describe('destinatarios WhatsApp', () => {
     const links = meetingWhatsapp({ ...meeting('a', '10:00', '11:00'), company_id: 'c' }, data)
     expect(links).toHaveLength(1)
     expect(links[0].url).toContain('wa.me/5493817654321')
+  })
+})
+
+describe('initialScrollHour', () => {
+  const at = (hour: number, minute = 0) => ({
+    starts_at: new Date(2026, 10, 19, hour, minute).toISOString(),
+  })
+  it('abre a las 8 cuando no hay reuniones o todas son más tarde', () => {
+    expect(initialScrollHour([])).toBe(8)
+    expect(initialScrollHour([at(10), at(15)])).toBe(8)
+  })
+  it('sube hasta una hora antes de la reunión más temprana', () => {
+    expect(initialScrollHour([at(7, 30), at(13)])).toBe(6)
+    expect(initialScrollHour([at(6)])).toBe(5)
+  })
+  it('no baja de la medianoche', () => {
+    expect(initialScrollHour([at(0, 30)])).toBe(0)
   })
 })

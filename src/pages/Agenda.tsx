@@ -19,6 +19,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
+  SlidersHorizontal,
   Search,
   Clock,
   Video,
@@ -31,7 +32,7 @@ import {
 } from 'lucide-react'
 import { useStore } from '../lib/store'
 import { dateLabel, normalize, messageOf } from '../lib/utils'
-import { layoutMeetings, meetingWhatsapp } from '../lib/agenda'
+import { initialScrollHour, layoutMeetings, meetingWhatsapp } from '../lib/agenda'
 import {
   pendingMeeting,
   pendingLabels,
@@ -402,6 +403,8 @@ export function Agenda({ open }: { open: OpenForm }) {
     [person, setPerson] = useState(''),
     [company, setCompany] = useState(''),
     [state, setState] = useState('all')
+  const [now, setNow] = useState(() => new Date()),
+    [filtersOpen, setFiltersOpen] = useState(false)
   const calendarRef = useRef<HTMLDivElement>(null)
   const daySlotsRef = useRef<HTMLDivElement>(null)
   const week = Array.from({ length: 7 }, (_, i) =>
@@ -420,13 +423,20 @@ export function Agenda({ open }: { open: OpenForm }) {
         `${m.title} ${m.guests} ${data.companies.find((c) => c.id === m.company_id)?.name || ''}`,
       ).includes(normalize(search)),
   )
+  const activeFilters = [person, company, state !== 'all' ? state : ''].filter(Boolean).length
   const dayMeetings = filtered
     .filter((m) => isSameDay(new Date(m.starts_at), date))
     .sort((a, b) => a.starts_at.localeCompare(b.starts_at))
   const selected = data.meetings.find((m) => m.id === params.get('reunion'))
+  const weekMeetings = filtered.filter((m) => week.some((d) => isSameDay(new Date(m.starts_at), d)))
+  const startHour = initialScrollHour(weekMeetings)
   useEffect(() => {
-    if (calendarRef.current) calendarRef.current.scrollTop = 8 * 48
-  }, [mode])
+    if (calendarRef.current) calendarRef.current.scrollTop = startHour * 48
+  }, [mode, startHour])
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 60000)
+    return () => clearInterval(timer)
+  }, [])
   useEffect(() => {
     if (daySlotsRef.current) daySlotsRef.current.scrollTop = 4 * 52
   }, [mode, date])
@@ -457,7 +467,7 @@ export function Agenda({ open }: { open: OpenForm }) {
           </button>
         }
       />
-      <div className="toolbar agenda-filters">
+      <div className={`toolbar agenda-filters ${filtersOpen ? 'filters-open' : ''}`}>
         <label className="search-field">
           <Search size={18} />
           <input
@@ -467,6 +477,15 @@ export function Agenda({ open }: { open: OpenForm }) {
             onChange={(e) => setSearch(e.target.value)}
           />
         </label>
+        <button
+          type="button"
+          className="button secondary filters-toggle"
+          aria-expanded={filtersOpen}
+          onClick={() => setFiltersOpen((open) => !open)}
+        >
+          <SlidersHorizontal size={16} />
+          Filtros{activeFilters ? ` (${activeFilters})` : ''}
+        </button>
         <select
           aria-label="Filtrar participante"
           value={person}
@@ -606,7 +625,17 @@ export function Agenda({ open }: { open: OpenForm }) {
                   ))}
                 </div>
                 {week.map((d) => (
-                  <div className="week-day" key={d.toISOString()}>
+                  <div
+                    className={`week-day ${isSameDay(d, now) ? 'today' : ''}`}
+                    key={d.toISOString()}
+                  >
+                    {isSameDay(d, now) && (
+                      <div
+                        className="now-line"
+                        aria-hidden="true"
+                        style={{ top: (now.getHours() + now.getMinutes() / 60) * 48 }}
+                      />
+                    )}
                     {Array.from({ length: 24 }, (_, h) => (
                       <button
                         type="button"
@@ -643,7 +672,7 @@ export function Agenda({ open }: { open: OpenForm }) {
                         <button
                           draggable
                           onDragStart={(e) => e.dataTransfer.setData('text/plain', m.id)}
-                          className={`calendar-event ${m.status}`}
+                          className={`calendar-event ${m.status} type-${m.location_type}`}
                           key={m.id}
                           title={`${m.title} · ${dateLabel(m.starts_at, 'HH:mm')} – ${dateLabel(m.ends_at, 'HH:mm')}`}
                           style={{
@@ -671,37 +700,17 @@ export function Agenda({ open }: { open: OpenForm }) {
               </div>
             </div>
             <footer className="calendar-hint">
-              Hacé clic en un horario para agendar. Arrastrá una reunión para reprogramarla.
+              <span>
+                Hacé clic en un horario para agendar. Arrastrá una reunión para reprogramarla.
+              </span>
+              <span className="calendar-legend" aria-label="Tipos de reunión">
+                <i className="virtual" /> Virtual <i className="presencial" /> Presencial{' '}
+                <i className="llamada" /> Llamada
+              </span>
             </footer>
           </div>
         )}
       </div>
-      {!search && (
-        <section className={`card day-slot-card ${mode === 'week' ? 'mobile-only' : ''}`}>
-          <div className="section-heading">
-            <h2>Agendar el {dateLabel(format(date, 'yyyy-MM-dd'), 'd MMMM')}</h2>
-          </div>
-          <p className="muted">
-            Elegí la hora de inicio. Vas a revisar los datos antes de confirmar.
-          </p>
-          <div className="day-slots" ref={daySlotsRef} aria-label="Horarios para agendar">
-            {Array.from({ length: 48 }, (_, n) => {
-              const time = `${String(Math.floor(n / 2)).padStart(2, '0')}:${n % 2 ? '30' : '00'}`
-              return (
-                <button
-                  className="button secondary"
-                  key={time}
-                  onClick={() => createAt(date, time)}
-                  aria-label={`Agendar a las ${time}`}
-                >
-                  <Plus size={14} />
-                  {time}
-                </button>
-              )
-            })}
-          </div>
-        </section>
-      )}
       <section className={mode === 'week' && !search ? 'agenda-day-list mobile-only' : ''}>
         <div className="section-heading">
           <h2>
@@ -731,6 +740,32 @@ export function Agenda({ open }: { open: OpenForm }) {
           </div>
         )}
       </section>
+      {!search && (
+        <section className={`card day-slot-card ${mode === 'week' ? 'mobile-only' : ''}`}>
+          <div className="section-heading">
+            <h2>Agendar el {dateLabel(format(date, 'yyyy-MM-dd'), 'd MMMM')}</h2>
+          </div>
+          <p className="muted">
+            Elegí la hora de inicio. Vas a revisar los datos antes de confirmar.
+          </p>
+          <div className="day-slots" ref={daySlotsRef} aria-label="Horarios para agendar">
+            {Array.from({ length: 48 }, (_, n) => {
+              const time = `${String(Math.floor(n / 2)).padStart(2, '0')}:${n % 2 ? '30' : '00'}`
+              return (
+                <button
+                  className="button secondary"
+                  key={time}
+                  onClick={() => createAt(date, time)}
+                  aria-label={`Agendar a las ${time}`}
+                >
+                  <Plus size={14} />
+                  {time}
+                </button>
+              )
+            })}
+          </div>
+        </section>
+      )}
       {!search && mode === 'week' && (
         <section className="agenda-upcoming">
           <div className="section-heading">

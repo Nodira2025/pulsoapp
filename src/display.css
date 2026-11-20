@@ -45,7 +45,7 @@
   }
   .welcome-brand p {
     margin-top: 6px;
-    font-size: 6px;
+    font-size: 0.6875rem;
     letter-spacing: 1.3px;
   }
   .welcome-strip {
@@ -64,7 +64,7 @@
     font-size: 17px;
   }
   .welcome-strip span {
-    font-size: 9px;
+    font-size: 0.6875rem;
     line-height: 1.35;
   }
   .welcome-body {
@@ -123,19 +123,19 @@
   }
   .welcome-start p {
     margin-top: 8px;
-    font-size: 10px;
+    font-size: 0.6875rem;
   }
   .welcome-footer {
     padding: 9px;
     gap: 8px;
-    font-size: 9px;
+    font-size: 0.6875rem;
     border-radius: 13px;
   }
   .welcome-footer img {
     width: 27px;
   }
   .welcome-footer small {
-    font-size: 6px;
+    font-size: 0.6875rem;
   }
   .welcome-shell .app-footer {
     display: none;

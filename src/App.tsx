@@ -1,4 +1,3 @@
-import { DisplayScale } from './components/DisplayScale'
 import { useEffect, useState, type FormEvent } from 'react'
 import {
   HashRouter,
@@ -59,6 +58,17 @@ const nav = [
   { to: '/cobros', name: 'Cobros y cuotas', icon: Wallet },
   { to: '/gastos', name: 'Gastos', icon: Receipt },
 ]
+const extraTitles: Record<string, string> = {
+  '/resumen': 'Resumen',
+  '/notificaciones': 'Notificaciones',
+  '/perfil': 'Mi perfil',
+}
+function pageName(pathname: string) {
+  const item = nav.find((n) =>
+    n.to === '/' ? pathname === '/' : pathname === n.to || pathname.startsWith(`${n.to}/`),
+  )
+  return item?.name || extraTitles[pathname] || 'Espacio de trabajo'
+}
 function Login() {
   const navigate = useNavigate()
   const [username, setUsername] = useState(''),
@@ -209,7 +219,9 @@ function Shell() {
     const close = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setQuick(false)
-        document.querySelector<HTMLButtonElement>('.fab')?.focus()
+        Array.from(document.querySelectorAll<HTMLButtonElement>('.fab, .mobile-create'))
+          .find((button) => button.offsetParent)
+          ?.focus()
       }
     }
     window.addEventListener('keydown', close)
@@ -321,9 +333,7 @@ function Shell() {
           <div className="breadcrumb">
             <span>PULSO</span>
             <span>/</span>
-            <strong>
-              {nav.find((n) => n.to === location.pathname)?.name || 'Espacio de trabajo'}
-            </strong>
+            <strong>{pageName(location.pathname)}</strong>
           </div>
           <form
             className="global-search"
@@ -342,9 +352,15 @@ function Shell() {
             <kbd>↵</kbd>
           </form>
           <div className="topbar-actions">
-            <ThemeControl />
-            <DisplayScale />
             <span className="team-tag">Equipo PULSO</span>
+            <button
+              className="icon-button mobile-create"
+              aria-label={quick ? 'Cerrar acciones' : 'Crear'}
+              aria-expanded={quick}
+              onClick={() => setQuick(!quick)}
+            >
+              {quick ? <X size={20} /> : <Plus size={20} />}
+            </button>
             <button
               className="icon-button notification-button"
               aria-label={`Notificaciones${unread ? `, ${unread} sin leer` : ''}`}
@@ -478,6 +494,14 @@ function Shell() {
           <span>Más</span>
         </button>
       </nav>
+      {quick && (
+        <button
+          className="quick-backdrop"
+          aria-label="Cerrar acciones"
+          tabIndex={-1}
+          onClick={() => setQuick(false)}
+        />
+      )}
       <div className="floating-actions">
         {quick && (
           <nav className="quick-menu" aria-label="Menú de acciones">

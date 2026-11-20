@@ -1,0 +1,187 @@
+/* Ajustes de uso en celular, agenda y modo noche. Se carga al final para ordenar la cascada. */
+
+/* ---- Crear: botón en la barra superior (celular) y panel de acciones ---- */
+.mobile-create {
+  display: none;
+}
+.quick-backdrop {
+  display: none;
+}
+.display-scale-label {
+  margin: 14px 0 6px;
+}
+@media (min-width: 761px) {
+  /* Deja espacio al final de la página para que el botón flotante no tape contenido. */
+  .page {
+    padding-bottom: 104px;
+  }
+}
+@media (max-width: 760px) {
+  .fab {
+    display: none;
+  }
+  .mobile-create {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: #505bef;
+    color: #fff;
+  }
+  .quick-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 43;
+    border: 0;
+    background: #0a122a55;
+  }
+  .floating-actions {
+    left: 12px;
+    right: 12px;
+    bottom: calc(80px + env(safe-area-inset-bottom));
+    align-items: stretch;
+  }
+  .quick-menu {
+    width: 100%;
+    max-height: calc(100dvh - 170px);
+    overflow-y: auto;
+  }
+  /* Barra superior: título de la pantalla en lugar de ajustes poco usados. */
+  .topbar .breadcrumb {
+    display: flex;
+  }
+  .topbar .breadcrumb > span {
+    display: none;
+  }
+  .topbar .breadcrumb > strong {
+    display: block;
+    font-size: 1.0625rem;
+    font-weight: 650;
+    color: var(--ink, #20283b);
+  }
+  .topbar-actions {
+    margin-left: auto;
+    gap: 8px;
+  }
+}
+
+/* ---- Agenda ---- */
+.filters-toggle {
+  display: none;
+}
+@media (max-width: 760px) {
+  .agenda-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .agenda-filters > .search-field {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+  .agenda-filters > .filters-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    min-height: 46px;
+  }
+  .agenda-filters > select {
+    display: none;
+  }
+  .agenda-filters.filters-open > select {
+    display: block;
+    flex: 1 1 calc(50% - 5px);
+    min-width: 0;
+    text-overflow: ellipsis;
+  }
+  .agenda-filters.filters-open > select:nth-of-type(1) {
+    order: 1;
+  }
+  .agenda-filters.filters-open > select:nth-of-type(3) {
+    order: 2;
+  }
+  .agenda-filters.filters-open > select:nth-of-type(2) {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+.week-day {
+  position: relative;
+}
+.week-day.today {
+  background: #505bef12;
+}
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #e5365d;
+  z-index: 3;
+  pointer-events: none;
+}
+.now-line::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e5365d;
+}
+/* Color según el tipo de reunión; completadas y canceladas conservan el suyo. */
+:root .calendar-event.scheduled.type-presencial {
+  background: #0b6b83;
+  border-color: #5fc7de;
+  border-left-color: #ffd166;
+}
+:root .calendar-event.scheduled.type-llamada {
+  background: #8a4f0d;
+  border-color: #e0a85a;
+  border-left-color: #ffe08a;
+}
+.calendar-hint {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.calendar-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.calendar-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.calendar-legend i.virtual {
+  background: #5140be;
+}
+.calendar-legend i.presencial {
+  background: #0b6b83;
+}
+.calendar-legend i.llamada {
+  background: #8a4f0d;
+}
+
+/* ---- Modo noche: el campo interno ya no repite el borde de su contenedor ---- */
+:root[data-theme='dark'] .global-search input,
+:root[data-theme='dark'] .search-field input,
+:root[data-theme='dark'] .display-scale select {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Rótulo bajo el logo: una sola línea aun con letra más grande. */
+.brand small {
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}

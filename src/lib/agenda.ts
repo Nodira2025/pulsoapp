@@ -46,6 +46,13 @@ export function layoutMeetings(meetings: Meeting[]) {
   return output
 }
 
+// Hora a la que abre la grilla semanal: las 8:00, o una hora antes de la reunión más temprana.
+export function initialScrollHour(meetings: Pick<Meeting, 'starts_at'>[], fallback = 8) {
+  if (!meetings.length) return fallback
+  const earliest = Math.min(...meetings.map((m) => new Date(m.starts_at).getHours()))
+  return Math.max(0, Math.min(fallback, earliest - 1))
+}
+
 export type AttentionItem = {
   id: string
   kind: 'task' | 'meeting' | 'payment'

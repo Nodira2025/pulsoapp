@@ -1,8 +1,12 @@
-import { createClient } from '@supabase/supabase-js'
-export const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL || 'https://ckcbxnhwpnvhpskculga.supabase.co',
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_cCX6krVyAF6Q-4JVCr1GVg_LxPkkl4o',
-)
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { validateSupabaseEnvironment } from './environment'
+
+// Se inicializa en el arranque, antes de importar App, dentro de su manejo de errores.
+export let supabase: SupabaseClient
+export function initializeSupabase() {
+  const { url, key } = validateSupabaseEnvironment(import.meta.env)
+  supabase = createClient(url, key)
+}
 export async function upload(file: File, userId: string) {
   if (file.size > 20 * 1024 * 1024) throw new Error('El archivo supera los 20 MB.')
   const name = file.name.replace(/[^a-zA-Z0-9._-]/g, '_')

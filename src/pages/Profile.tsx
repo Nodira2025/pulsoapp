@@ -5,6 +5,7 @@ import { useStore } from '../lib/store'
 import { supabase, upload } from '../lib/supabase'
 import { DeviceActions, useDevice } from '../components/DeviceSetup'
 import { ThemeControl } from '../lib/theme'
+import { DisplayScale } from '../components/DisplayScale'
 import { messageOf } from '../lib/utils'
 import { PageTitle, Avatar } from '../components/UI'
 import type { OpenForm } from './Feed'
@@ -227,6 +228,8 @@ export function Profile({ open }: { open: OpenForm }) {
               Elegí modo día, noche o seguir la configuración de tu dispositivo.
             </p>
             <ThemeControl full />
+            <p className="muted display-scale-label">Tamaño del contenido</p>
+            <DisplayScale />
           </section>
           <section className="card padded">
             <h3>PULSO en tu dispositivo</h3>

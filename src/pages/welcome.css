@@ -73,7 +73,7 @@
   color: #062851;
 }
 .welcome-brand p {
-  font-size: 10px;
+  font-size: 0.6875rem;
   letter-spacing: 3px;
   margin: 8px 0 0;
 }
@@ -152,7 +152,7 @@
 .welcome-motto {
   display: block;
   margin-top: 25px;
-  font-size: 9px;
+  font-size: 0.6875rem;
   letter-spacing: 2px;
   color: #627797;
 }
@@ -237,7 +237,7 @@
 }
 .welcome-footer small {
   margin-left: auto;
-  font-size: 8px;
+  font-size: 0.6875rem;
   letter-spacing: 2px;
 }
 .avatar.square:has(img) {
@@ -303,7 +303,7 @@
     letter-spacing: -3px;
   }
   .welcome-brand p {
-    font-size: 7px;
+    font-size: 0.6875rem;
     letter-spacing: 1.5px;
   }
   .welcome-strip {
@@ -322,7 +322,7 @@
     font-size: 19px;
   }
   .welcome-strip span {
-    font-size: 9px;
+    font-size: 0.6875rem;
   }
   .welcome-body {
     display: flex;
@@ -353,10 +353,10 @@
   .welcome-footer {
     gap: 12px;
     padding: 12px;
-    font-size: 10px;
+    font-size: 0.6875rem;
   }
   .welcome-footer small {
-    font-size: 6px;
+    font-size: 0.6875rem;
     letter-spacing: 1px;
   }
 }

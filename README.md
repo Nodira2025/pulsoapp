@@ -29,7 +29,16 @@ Requiere Node.js 22.12 o superior; el flujo de publicación utiliza Node.js 24.
 ```sh
 npm ci
 cp .env.example .env
+# Completá .env con la URL y la clave publishable de un proyecto de Supabase de desarrollo.
 npm run dev
+```
+
+La aplicación ya no tiene valores por defecto: si falta `.env`, se detiene con un mensaje claro en lugar de conectarse a producción. Para desarrollar, creá un proyecto de Supabase aparte y aplicá en orden los archivos de `supabase/migrations`. La publicación en producción recibe sus valores desde `.github/workflows/deploy.yml`.
+
+Cada pull request ejecuta `.github/workflows/ci.yml` (formato, tipos, pruebas y compilación). Antes de abrirlo podés correr lo mismo en tu equipo:
+
+```sh
+npx prettier --check "src/**/*.{ts,tsx,css}" && npm run check && npm test && npm run build
 ```
 
 ```sh
