@@ -13,6 +13,7 @@ export interface Profile {
   created_at: string
 }
 export interface Company {
+  universe_visible?: boolean
   id: ID
   name: string
   industry: string
@@ -27,6 +28,7 @@ export interface Company {
   created_at: string
 }
 export interface Project {
+  universe_visible?: boolean
   id: ID
   company_id: ID
   name: string

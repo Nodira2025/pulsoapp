@@ -93,6 +93,7 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
       maps_url: '',
       networks: '',
       notes: '',
+      universe_visible: false,
     }
     steps = [
       {
@@ -101,6 +102,10 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
           f('name', 'Nombre de la empresa', 'text', true),
           f('industry', 'Rubro'),
           imageField('logo', 'Logo de la empresa'),
+          f('universe_visible', 'Mostrar esta empresa en el universo público', 'checkbox', false, {
+            hint: 'Publica nombre, rubro y logo. Los contactos y notas permanecen privados. Los proyectos se publican por separado.',
+            show: () => data.companies.some(c => typeof c.universe_visible === 'boolean'),
+          }),
         ],
       },
       {
@@ -136,6 +141,7 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
       priority: 'medium',
       github_url: '',
       public_url: '',
+      universe_visible: false,
     }
     steps = [
       {
@@ -166,6 +172,10 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
           f('budget', 'Presupuesto acordado (ARS)', 'number', false, { min: 0 }),
           f('github_url', 'Repositorio de GitHub', 'url'),
           f('public_url', 'Dirección pública del proyecto', 'url'),
+          f('universe_visible', 'Publicar nombre y enlace de este proyecto en el universo', 'checkbox', false, {
+            hint: 'Se sincroniza automáticamente cuando la empresa también es pública. Usá una URL HTTPS sin credenciales.',
+            show: () => data.projects.some(p => typeof p.universe_visible === 'boolean'),
+          }),
         ],
       },
     ]
@@ -526,6 +536,7 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
         maps_url: v.maps_url || '',
         networks: v.networks || '',
         notes: v.notes || '',
+        ...(data.companies.some(c => typeof c.universe_visible === 'boolean') ? { universe_visible: !!v.universe_visible } : {}),
         ...(v.logo?.[0]
           ? { logo_path: await upload(await compressImage(v.logo[0], 1200), user!.id) }
           : {}),
@@ -551,6 +562,7 @@ export function Forms({ request, onClose }: { request: FormRequest; onClose: () 
         priority: v.priority,
         github_url: v.github_url || '',
         public_url: v.public_url || '',
+        ...(data.projects.some(p => typeof p.universe_visible === 'boolean') ? { universe_visible: !!v.universe_visible } : {}),
       }
       const id = request.id || (await insert('projects', { ...values, ...creator })).id
       if (request.id) await update('projects', id, values)
